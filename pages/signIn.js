@@ -6,7 +6,7 @@ import BugReportOutlinedIcon from '@mui/icons-material/BugReportOutlined';
 import React from "react";
 import { useRouter } from 'next/router';
 
-import {firestore} from "../firebase";
+import {firestore} from "./api/firebase";
 import {addDoc, getDocs, collection} from "@firebase/firestore"
 
 export default function signIn() {
