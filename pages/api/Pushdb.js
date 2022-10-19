@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import {addDoc, collection} from "@firebase/firestore";
-import {firestore} from "../firebase";
+import {firestore} from "/Firebase";
 
 export default function handler(req, res) {
     const user = req.body;
