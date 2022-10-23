@@ -26,7 +26,7 @@ export default function signIn() {
     snapshot.forEach(docSnap => {
         var userdata = docSnap.data();
         if (userdata.name === document.getElementById("username").value && userdata.pass === document.getElementById("password").value) {
-          Cookies.set('login_info', document.getElementById("username").value + "," + docSnap.id)
+          Cookies.set('login_info', document.getElementById("username").value + "," + docSnap.id, { secure: true })
           router.push({
             pathname: '/home',
             query: { username: document.getElementById("username").value, pass: document.getElementById("password").value}
@@ -58,7 +58,7 @@ export default function signIn() {
             name: document.getElementById("register_username").value,
             pass: document.getElementById("register_password").value,
         }).then(function(docRef) {
-          Cookies.set('login_info', document.getElementById("register_username").value + "," + docRef.id)
+          Cookies.set('login_info', document.getElementById("register_username").value + "," + docRef.id, { secure: true })
       });
     }
     try {
@@ -76,12 +76,12 @@ export default function signIn() {
   
   return (
     <>
-      <Container id="main" className="App" style={{marginTop: "2em"}}>
+      <Container id="main" className="App">
         {!isShown && (
           <form onSubmit={handleLogin}>
             <Grid container spacing={2} style={{justifyContent: "center", textAlign: "center"}}>
               <Grid item={true} xs={6}>
-                <Card variant="outlined">
+                <Card variant="outlined" style={{padding: "3em", paddingTop: "0em"}}>
                   <h1 style={{marginTop: "1em"}}>IssueTrack</h1>
                   <BugReportOutlinedIcon fontSize='large'/>
                   <h3 style={{marginTop: "2em"}}><u>Login</u></h3>
@@ -89,14 +89,12 @@ export default function signIn() {
                   <br />
                   <TextField style={{marginTop: "2em"}} required id="password" label="Password" />
                   <br />
-                  <Button style={{marginTop: "3em", marginBottom: "3em"}} type="submit" variant="contained" color="primary" size="large">submit</Button>
+                  <Button style={{marginTop: "3em", marginBottom: "2em"}} type="submit" variant="contained" color="primary" size="large">submit</Button>
                   <br />
                   <p id="err"></p>
+                  <Button style={{marginTop: "1em", marginBottom: "1em", marginRight: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={changestate}>Register</Button>
+                  <Button style={{marginTop: "1em", marginBottom: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={Demo}>Demo Login</Button>
                 </Card>
-              </Grid>
-              <Grid item={true} xs={12}>
-                <Button style={{marginTop: "3em", marginBottom: "3em", marginRight: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={changestate}>Register</Button>
-                <Button style={{marginTop: "3em", marginBottom: "3em", backgroundColor: "grey"}} variant="contained" size="large" onClick={Demo}>Demo Login</Button>
               </Grid>
             </Grid>
           </form>
@@ -105,7 +103,7 @@ export default function signIn() {
           <form onSubmit={handleRegister}>
             <Grid container spacing={2} style={{justifyContent: "center", textAlign: "center"}}>
               <Grid item={true} xs={6}>
-                <Card variant="outlined">
+                <Card variant="outlined" style={{padding: "3em", paddingTop: "0em"}}>
                   <h1 style={{marginTop: "1em"}}>IssueTrack</h1>
                   <BugReportOutlinedIcon fontSize='large'/>
                   <h3 style={{marginTop: "2em"}}><u>Register</u></h3>
@@ -115,13 +113,11 @@ export default function signIn() {
                   <br />
                   <TextField style={{marginTop: "2em"}} required id="conf_password" label="Confirm Password" />
                   <br />
-                  <Button style={{marginTop: "3em", marginBottom: "3em"}} type="submit" variant="contained" color="primary" size="large">submit</Button>
+                  <Button style={{marginTop: "3em", marginBottom: "2em"}} type="submit" variant="contained" color="primary" size="large">submit</Button>
                   <br />
                   <p id="err"></p>
+                  <Button style={{marginTop: "1em", marginBottom: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={changestate}>Login</Button>
                 </Card>
-              </Grid>
-              <Grid item={true} xs={12}>
-                <Button style={{marginTop: "3em", marginBottom: "3em", backgroundColor: "grey"}} variant="contained" size="large" onClick={changestate}>Login</Button>
               </Grid>
             </Grid>
           </form>
