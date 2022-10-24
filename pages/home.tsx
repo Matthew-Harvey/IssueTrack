@@ -9,22 +9,13 @@ export default function home() {
     const checkRequest = async(e) => {
         e.preventDefault();
         const login_status = await checkAuth();
-        console.log(login_status);
-        if (login_status == true) {
-            return (
-                <>
-                    <Mynav />
-                    <p>USRENAME GOES HERE</p>
-                    <p>LOGGED IN!</p>
-                </>
-            )
+        const username = login_status[0];
+        const isAuth = login_status[1];
+        console.log(username, isAuth);
+        if (isAuth == true) {
+            // allow action
         } else {
-            return (
-                <>
-                    <Mynav />
-                    <p>Not Logged in</p>
-                </>
-            )
+            // reject action
         }
     }
     return (
@@ -36,10 +27,11 @@ export default function home() {
 }
 
 const checkAuth = async function () {
-    const loginarr = []
+    const loginarr = [];
+    var username_cookie = "";
     if (getCookie('login_info') != undefined) {
         var strsplit = getCookie('login_info').toString().split(",");
-        const username_cookie = strsplit[0];
+        var username_cookie = strsplit[0];
         const id_cookiestrsplit = strsplit[1];
         const docRef = doc(firestore, "users", id_cookiestrsplit);
         let snapinfo = await getDoc(docRef);
@@ -48,9 +40,9 @@ const checkAuth = async function () {
         }
     }
     if (loginarr.length > 0) {
-        return true
+        return [username_cookie, true]
     } else {
-        return false;
+        return [username_cookie, false];
     }
 }
 

@@ -6,7 +6,7 @@ import BugReportOutlinedIcon from '@mui/icons-material/BugReportOutlined';
 import React from "react";
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-
+import axios from 'axios';
 import {firestore} from "./api/Firebase";
 import {addDoc, getDocs, collection} from "@firebase/firestore";
 
@@ -22,19 +22,20 @@ export default function signIn() {
 
   const handleLogin = async(e) => {
     e.preventDefault();
-    let snapshot = await getDocs(user_collection);
-    snapshot.forEach(docSnap => {
-        var userdata = docSnap.data();
-        if (userdata.name === document.getElementById("username").value && userdata.pass === document.getElementById("password").value) {
-          Cookies.set('login_info', document.getElementById("username").value + "," + docSnap.id, { secure: true })
-          router.push({
-            pathname: '/home',
-            query: { username: document.getElementById("username").value, pass: document.getElementById("password").value}
-          }, '/home', { shallow: true });
-        }
-    });
-    document.getElementById("err").innerText = "User not found.";
+    const getValid = await axios.get('/api/ValidateLogin', {
+      params: {
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value,
+      }
+    })
+    if (getValid.data.isFound == true) {
+      Cookies.set('login_info', document.getElementById("username").value + "," + getValid.data.id, { secure: true })
+      router.push({pathname: '/home', query: { username: document.getElementById("username").value, pass: document.getElementById("password").value}}, '/home', { shallow: true });
+    } else {
+      document.getElementById("err").innerText = "User not found.";
+    }
   }
+
   const handleRegister = async(e) => {
     e.preventDefault();
     var canAdd = true;
@@ -59,6 +60,10 @@ export default function signIn() {
             pass: document.getElementById("register_password").value,
         }).then(function(docRef) {
           Cookies.set('login_info', document.getElementById("register_username").value + "," + docRef.id, { secure: true })
+          router.push({
+            pathname: '/home',
+            query: { username: document.getElementById("register_username").value, pass: document.getElementById("register_password").value}
+          }, '/home', { shallow: true });
       });
     }
     try {
@@ -67,6 +72,7 @@ export default function signIn() {
       console.log(e);
     }
   }
+
   const Demo = async(e) => {
     e.preventDefault();
     document.getElementById("username").value = "demo";
