@@ -7,13 +7,9 @@ import React from "react";
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import {firestore} from "./api/Firebase";
-import {addDoc, getDocs, collection} from "@firebase/firestore";
 
 export default function signIn() {
   const [isShown, setIsShown] = useState(false);
-  var err = "";
-  const user_collection = collection(firestore, "users");
   const router = useRouter();
 
   const changestate = async(e) => {
@@ -38,38 +34,18 @@ export default function signIn() {
 
   const handleRegister = async(e) => {
     e.preventDefault();
-    var canAdd = true;
-    // password + confirm match
-    if (document.getElementById("conf_password").value !== document.getElementById("register_password").value) {
-        canAdd = false;
-        err = "Passwords dont match.";
-    }
-    if (canAdd === true) {
-      let snapshot = await getDocs(user_collection);
-      snapshot.forEach(docSnap => {
-          var userdata = docSnap.data();
-          if (userdata.name === document.getElementById("register_username").value) {
-              canAdd = false;
-          }
-      });
-      err = "Username is not available.";
-    }
-    if (canAdd === true) {
-        await addDoc(collection(firestore, "users"), {
-            name: document.getElementById("register_username").value,
-            pass: document.getElementById("register_password").value,
-        }).then(function(docRef) {
-          Cookies.set('login_info', document.getElementById("register_username").value + "," + docRef.id, { secure: true })
-          router.push({
-            pathname: '/home',
-            query: { username: document.getElementById("register_username").value, pass: document.getElementById("register_password").value}
-          }, '/home', { shallow: true });
-      });
-    }
-    try {
-      document.getElementById("err").innerText = err;
-    } catch (e) {
-      console.log(e);
+    const getValid = await axios.get('/api/ValidateRegister', {
+      params: {
+        username: document.getElementById("register_username").value,
+        password: document.getElementById("register_password").value,
+        confpassword: document.getElementById("conf_password").value,
+      }
+    })
+    if (getValid.data.isAdded == true) {
+      Cookies.set('login_info', document.getElementById("register_username").value + "," + getValid.data.id, { secure: true })
+      router.push({pathname: '/home', query: { username: document.getElementById("register_username").value, pass: document.getElementById("register_password").value}}, '/home', { shallow: true });
+    } else {
+      document.getElementById("err").innerText = getValid.data.error;
     }
   }
 

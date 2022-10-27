@@ -3,19 +3,18 @@ import {firestore} from "./Firebase";
 import {getDocs, collection, query, where} from "@firebase/firestore";
 
 export default async function ValidateLogin(req: NextApiRequest, res: NextApiResponse) {
-    const username = req.query.username;
+    var { userid } = req.query;
+    userid = userid.toString();
+    userid = userid.replace(/\'/g, "");
     const user_collection = collection(firestore, "users");
-    const password = req.query.password;
-    var doesmatch = false;
-    var idmatch = "";
-    const q = query(user_collection, where("name", "==", username));
+    var isFound = false;
+    const q = query(user_collection, where("name", "==", userid));
     let snapshot = await getDocs(q);
     snapshot.forEach(docSnap => {
         var userdata = docSnap.data();
-        if (userdata.name === username && userdata.pass === password) {
-            doesmatch = true;
-            idmatch = docSnap.id;
+        if (userdata.name === userid) {
+            isFound = true;
         }
     });
-    res.status(200).json({isFound: doesmatch, id: idmatch});
+    res.status(200).json({isFound: isFound});
 }
