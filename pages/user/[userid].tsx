@@ -1,6 +1,7 @@
 import axios from 'axios';
 import router, { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Mynav from '../comps/Mynav';
 
 export default function UserProfile() {
   const router = useRouter();
@@ -14,11 +15,12 @@ export default function UserProfile() {
       setFound(reponse.data.isFound);
     }
     fetchData();
-  }, [userid]);
+  }, [userid, isFound]);
 
   if (isFound == true) {
     return (
       <>
+          <Mynav params={{username: userid}}/>
           <p>USER PAGE for - {userid}</p>
       </>
     )

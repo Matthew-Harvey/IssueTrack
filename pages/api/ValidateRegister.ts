@@ -5,6 +5,7 @@ import {addDoc, getDocs, collection, where, query} from "@firebase/firestore";
 export default async function ValidateLogin(req: NextApiRequest, res: NextApiResponse) {
     const username = req.query.username;
     const password = req.query.password;
+    const email = req.query.email;
     const confpassword = req.query.confpassword;
     const user_collection = collection(firestore, "users");
     var canAdd = true;
@@ -29,6 +30,7 @@ export default async function ValidateLogin(req: NextApiRequest, res: NextApiRes
         await addDoc(collection(firestore, "users"), {
             name: username,
             pass: password,
+            email: email,
         }).then(function(docRef) {
           res.status(200).json({isAdded: true, id: docRef.id, error: ""});
       })

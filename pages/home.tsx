@@ -27,7 +27,7 @@ export default function home() {
     if (isAuth == true) {
         return (
             <>
-                <Mynav />
+                <Mynav params={{username: username}}/>
                 <p>YOU ARE LOGGED IN AS {username}</p>
             </>
         )

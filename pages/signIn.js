@@ -38,6 +38,7 @@ export default function signIn() {
       params: {
         username: document.getElementById("register_username").value,
         password: document.getElementById("register_password").value,
+        email: document.getElementById("register_email").value,
         confpassword: document.getElementById("conf_password").value,
       }
     })
@@ -61,21 +62,21 @@ export default function signIn() {
       <Container id="main" className="App">
         {!isShown && (
           <form onSubmit={handleLogin}>
-            <Grid container spacing={2} style={{justifyContent: "center", textAlign: "center"}}>
-              <Grid item={true} xs={6}>
+            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+              <Grid item={true} xs={10}>
                 <Card variant="outlined" style={{padding: "3em", paddingTop: "0em"}}>
                   <h1 style={{marginTop: "1em"}}>IssueTrack</h1>
                   <BugReportOutlinedIcon fontSize='large'/>
-                  <h3 style={{marginTop: "2em"}}><u>Login</u></h3>
-                  <TextField style={{marginTop: "1em"}} required id="username" label="Username" />
+                  <h3 style={{marginTop: "1em"}}><u>Login</u></h3>
+                  <TextField style={{margin: "1em"}} required id="username" label="Username" />
                   <br />
-                  <TextField style={{marginTop: "2em"}} required id="password" label="Password" />
+                  <TextField style={{margin: "1em"}} required id="password" label="Password" />
                   <br />
-                  <Button style={{marginTop: "3em", marginBottom: "2em"}} type="submit" variant="contained" color="primary" size="large">submit</Button>
+                  <Button style={{margin: "1em"}} type="submit" variant="contained" color="primary" size="large">submit</Button>
                   <br />
                   <p id="err"></p>
-                  <Button style={{marginTop: "1em", marginBottom: "1em", marginRight: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={changestate}>Register</Button>
-                  <Button style={{marginTop: "1em", marginBottom: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={Demo}>Demo Login</Button>
+                  <Button style={{margin: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={changestate}>Register</Button>
+                  <Button style={{margin: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={Demo}>Demo Login</Button>
                 </Card>
               </Grid>
             </Grid>
@@ -83,22 +84,23 @@ export default function signIn() {
         )}
         {isShown && (
           <form onSubmit={handleRegister}>
-            <Grid container spacing={2} style={{justifyContent: "center", textAlign: "center"}}>
-              <Grid item={true} xs={6}>
+            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+              <Grid item={true} xs={10}>
                 <Card variant="outlined" style={{padding: "3em", paddingTop: "0em"}}>
                   <h1 style={{marginTop: "1em"}}>IssueTrack</h1>
                   <BugReportOutlinedIcon fontSize='large'/>
-                  <h3 style={{marginTop: "2em"}}><u>Register</u></h3>
-                  <TextField style={{marginTop: "1em"}} required id="register_username" label="Username" />
+                  <h3 style={{marginTop: "1em"}}><u>Register</u></h3>
+                  <TextField style={{margin: "1em"}} required id="register_username" label="Username" />
                   <br />
-                  <TextField style={{marginTop: "2em"}} required id="register_password" label="Password" />
+                  <TextField type="email" style={{margin: "1em"}} required id="register_email" label="Email" />
                   <br />
-                  <TextField style={{marginTop: "2em"}} required id="conf_password" label="Confirm Password" />
+                  <TextField type="password" style={{margin: "1em"}} required id="register_password" label="Password" />
                   <br />
-                  <Button style={{marginTop: "3em", marginBottom: "2em"}} type="submit" variant="contained" color="primary" size="large">submit</Button>
+                  <TextField type="password" style={{margin: "1em"}} required id="conf_password" label="Confirm Password" />
                   <br />
+                  <Button style={{margin: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={changestate}>Login</Button>
+                  <Button style={{margin: "1em"}} type="submit" variant="contained" color="primary" size="large">submit</Button>
                   <p id="err"></p>
-                  <Button style={{marginTop: "1em", marginBottom: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={changestate}>Login</Button>
                 </Card>
               </Grid>
             </Grid>
