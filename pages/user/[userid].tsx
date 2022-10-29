@@ -43,7 +43,6 @@ export default function UserProfile() {
   // ISSUES CLOSED
   // CURRENT WORK - ONLY IF OWNERS PROFILE (NOT STARTED, WIP, COMPLETED - EACH TEAM + INDIVIDUAL)
 
-
   if (isFound == true) {
     return (
       <>
@@ -61,10 +60,28 @@ export default function UserProfile() {
           </Grid>
       </>
     )
+  } else if (isFound == false) {
+    return (
+      <>
+          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+            <Grid item={true} xs={12}>
+              <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                <p>USER DOES NOT EXIST</p>
+              </Box>
+            </Grid>
+          </Grid>
+      </>
+    )
   } else {
     return (
       <>
-          <p>USER DOES NOT EXIST</p>
+          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+            <Grid item={true} xs={12}>
+              <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                <p>LOADING PAGE...</p>
+              </Box>
+            </Grid>
+          </Grid>
       </>
     )
   }

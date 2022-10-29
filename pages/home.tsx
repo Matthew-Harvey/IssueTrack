@@ -31,11 +31,17 @@ export default function home() {
                 <p>YOU ARE LOGGED IN AS {username}</p>
             </>
         )
-    } else {
+    } else if (isAuth == false){
         return (
             <>
                 <p>YOU ARE NOT LOGGED IN.</p>
                 <Link href='/'>Login/Register</Link>
+            </>
+        )
+    } else {
+        return (
+            <>
+                <p>LOADING PAGE...</p>
             </>
         )
     }
