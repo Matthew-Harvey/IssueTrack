@@ -17,6 +17,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Link from '@mui/material/Link';
 import GroupsIcon from '@mui/icons-material/Groups';
+import { Tooltip } from '@mui/material';
+import Zoom from '@mui/material/Zoom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -60,28 +62,21 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function PrimarySearchAppBar({params}) {
   var profilepath = "";
+  var username = "";
+  var loggedin = "";
   try {
     profilepath = "/user/" + params.username;
+    username = params.username;
+    loggedin = "Logged in as " + username;
   } catch {
     profilepath = "/user/" + "usernamewasundefined";
   }
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -89,25 +84,6 @@ export default function PrimarySearchAppBar({params}) {
   };
 
   const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}><Link href={profilepath} >Profile</Link></MenuItem>
-    </Menu>
-  );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
@@ -168,7 +144,7 @@ export default function PrimarySearchAppBar({params}) {
         >
           <AccountCircle />
         </IconButton>
-        <p><Link style={{color: "#000000"}} href="/home">Profile</Link></p>
+        <p><Link style={{color: "#000000"}} href={profilepath}>{username}</Link></p>
       </MenuItem>
     </Menu>
   );
@@ -220,18 +196,20 @@ export default function PrimarySearchAppBar({params}) {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <Link href={profilepath} style={{color: "#FFFFFF"}}>
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </Link>
+            <Tooltip title={loggedin} TransitionComponent={Zoom}>
+              <Link href={profilepath} style={{color: "#FFFFFF"}}>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              </Link>
+            </Tooltip>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -248,7 +226,6 @@ export default function PrimarySearchAppBar({params}) {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      {renderMenu}
     </Box>
   );
 }
