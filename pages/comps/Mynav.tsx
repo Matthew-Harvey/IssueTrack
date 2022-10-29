@@ -58,7 +58,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar({params}) {
-  const profilepath = "/user/" + params.username;
+  var profilepath = "";
+  try {
+    profilepath = "/user/" + params.username;
+  } catch {
+    profilepath = "/user/" + "usernamewasundefined";
+  }
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
