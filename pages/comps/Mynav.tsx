@@ -16,6 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Link from '@mui/material/Link';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -126,12 +127,24 @@ export default function PrimarySearchAppBar({params}) {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <GroupsIcon />
+        </IconButton>
+        <p><Link style={{color: "#000000"}} href="/home">Teams</Link></p>
+      </MenuItem>
+      <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p><Link style={{color: "#000000"}} href="/messages">Messages</Link></p>
       </MenuItem>
       <MenuItem>
         <IconButton
@@ -143,7 +156,7 @@ export default function PrimarySearchAppBar({params}) {
             <NotificationsIcon />
           </Badge>
         </IconButton>
-        <p>Notifications</p>
+        <p><Link style={{color: "#000000"}} href="/notifications">Notifications</Link></p>
       </MenuItem>
       <MenuItem>
         <IconButton
@@ -188,6 +201,11 @@ export default function PrimarySearchAppBar({params}) {
               />
             </Search>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={4} color="default">
+                <GroupsIcon />
+              </Badge>
+            </IconButton>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MailIcon />
