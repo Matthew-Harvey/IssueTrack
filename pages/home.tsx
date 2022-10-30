@@ -2,7 +2,7 @@ import Mynav from './comps/Mynav';
 import { getCookie } from 'cookies-next';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, Link } from '@mui/material';
 
 export default function home() {
     const [isAuth, setAuth] = useState(false);
@@ -28,20 +28,36 @@ export default function home() {
         return (
             <>
                 <Mynav params={{username: username}}/>
-                <p>YOU ARE LOGGED IN AS {username}</p>
+                <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                    <p>YOU ARE LOGGED IN AS {username}</p>
+                </Box>
             </>
         )
     } else if (isAuth == false){
         return (
             <>
-                <p>YOU ARE NOT LOGGED IN.</p>
-                <Link href='/'>Login/Register</Link>
+                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+                    <Grid item={true} xs={12}>
+                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                        <p>YOU ARE NOT LOGGED IN.</p>
+                    </Box>
+                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                        <Button><Link href='/'>Login/Register</Link></Button>
+                    </Box>
+                    </Grid>
+                </Grid>
             </>
         )
     } else {
         return (
             <>
-                <p>LOADING PAGE...</p>
+                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+                    <Grid item={true} xs={12}>
+                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                        <CircularProgress />
+                    </Box>
+                    </Grid>
+                </Grid>
             </>
         )
     }

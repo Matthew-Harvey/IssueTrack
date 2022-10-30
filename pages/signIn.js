@@ -18,7 +18,7 @@ export default function signIn() {
 
   const handleLogin = async(e) => {
     e.preventDefault();
-    const getValid = await axios.get('/api/ValidateLogin', {
+    const getValid = await axios.get('/api/login/ValidateLogin', {
       params: {
         username: document.getElementById("username").value,
         password: document.getElementById("password").value,
@@ -34,7 +34,7 @@ export default function signIn() {
 
   const handleRegister = async(e) => {
     e.preventDefault();
-    const getValid = await axios.get('/api/ValidateRegister', {
+    const getValid = await axios.get('/api/login/ValidateRegister', {
       params: {
         username: document.getElementById("register_username").value,
         password: document.getElementById("register_password").value,
