@@ -24,6 +24,7 @@ export default function signIn() {
         password: document.getElementById("password").value,
       }
     })
+    console.log(getValid.data);
     if (getValid.data.isFound == true) {
       Cookies.set('login_info', document.getElementById("username").value + "," + getValid.data.id, { secure: true })
       router.push({pathname: '/home', query: { username: document.getElementById("username").value, pass: document.getElementById("password").value}}, '/home', { shallow: true });
@@ -70,7 +71,7 @@ export default function signIn() {
                   <h3 style={{marginTop: "1em"}}><u>Login</u></h3>
                   <TextField style={{margin: "1em"}} required id="username" label="Username" />
                   <br />
-                  <TextField style={{margin: "1em"}} required id="password" label="Password" />
+                  <TextField type="password" style={{margin: "1em"}} required id="password" label="Password" />
                   <br />
                   <Button style={{margin: "1em"}} type="submit" variant="contained" color="primary" size="large">submit</Button>
                   <br />

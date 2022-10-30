@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import {firestore} from "../Firebase";
 import {addDoc, getDocs, collection, where, query} from "@firebase/firestore";
+import bcrypt from "bcrypt";
 
 export default async function ValidateLogin(req: NextApiRequest, res: NextApiResponse) {
     const username = req.query.username;
@@ -27,14 +28,8 @@ export default async function ValidateLogin(req: NextApiRequest, res: NextApiRes
       });
     }
     if (canAdd === true) {
-        await addDoc(collection(firestore, "users"), {
-            name: username,
-            pass: password,
-            email: email,
-            status: "",
-        }).then(function(docRef) {
-          res.status(200).json({isAdded: true, id: docRef.id, error: ""});
-      })
+      const hash = bcrypt.hashSync(password, 10);
+      await addDoc(collection(firestore, "users"), {name: username, pass: hash, email: email, status: "",}).then(function(docRef) { res.status(200).json({isAdded: true, id: docRef.id, error: ""});})
     } else {
       res.status(200).json({isAdded: false, id: "", error: err});
     }
