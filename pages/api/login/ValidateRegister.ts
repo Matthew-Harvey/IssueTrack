@@ -3,7 +3,7 @@ import {firestore} from "../Firebase";
 import {addDoc, getDocs, collection, where, query} from "@firebase/firestore";
 import bcrypt from "bcrypt";
 
-export default async function ValidateLogin(req: NextApiRequest, res: NextApiResponse) {
+export default async function ValidateRegister(req: NextApiRequest, res: NextApiResponse) {
     const username = req.query.username;
     const password = req.query.password;
     const email = req.query.email;
