@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://issuetrack.vercel.app/">
-    <img src="/vercel.svg" alt="Logo" width="70" height="70">
+    <img src="/public/vercel.svg" alt="Logo" width="70" height="70">
   </a>
 
   <h3 align="center">IssueTrack</h3>
@@ -53,7 +53,7 @@
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://issuetrack.vercel.app/)
-[product-screenshot]: vercel.svg
+[product-screenshot]: /public/vercel.svg
 
 This project was made to demonstrate a variety of skills by producing a full stack app that allows users + teams to collaborate on issues within their systems.
 
@@ -63,26 +63,18 @@ This project was made to demonstrate a variety of skills by producing a full sta
 
 A list of the key technologies used within this project:
 
-HTML/CSS, TypeScript, React, Next.js, Node.js, MaterialUI, Axios
+[Next][React][TypeScript][CSS][HTML][Node.js]][MaterialUI][Axios]
 
 Deployed to Vercel - <a href="https://issuetrack.vercel.app/">https://issuetrack.vercel.app/</a>
 
-* [![Next][Next.js]]
-* [![React][React.js]]
-* [![TypeScript][TypeScript]]
-* [![CSS][CSS]]
-* [![HTML][HTML]]
-* [![Node.js][Node.js]]
-* [![MaterialUI][MaterialUI]]
-* [![Axios][Axios]]
 
 [HTML]: https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white
 [CSS]: https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white
 [TypeScript]: https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white
 [Node.js]: 	https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white
 [MaterialUI]: https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[Next]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[React]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [Firebase]: https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white
 [Axios]: https://img.shields.io/badge/Axios-000000?style=for-the-badge&logo=Axios&logoColor=white
 
