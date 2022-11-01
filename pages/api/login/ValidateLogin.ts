@@ -5,7 +5,7 @@ import axios from "axios";
 
 export default async function ValidateLogin(req: NextApiRequest, res: NextApiResponse) {
     const user_collection = collection(firestore, "users");
-    const username = req.query.username;
+    var username = req.query.username;
     const password = req.query.password;
     var doesmatch = false;
     var idmatch = null;
@@ -14,10 +14,8 @@ export default async function ValidateLogin(req: NextApiRequest, res: NextApiRes
     let snapshot = await getDocs(q);
     snapshot.forEach(async docSnap => {
         var userdata = docSnap.data();
-        if (userdata.name == username) {
-            idmatch = docSnap.id;
-            pass = userdata.pass;
-        }
+        idmatch = docSnap.id;
+        pass = userdata.pass;
     });
     try {
         const getValid = await axios.get('https://issuetrack.vercel.app/api/login/checkPass', {

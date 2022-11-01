@@ -115,14 +115,6 @@ export default function PrimarySearchAppBar({params}) {
         <p><Link style={{color: "#000000"}} href="/home">Teams</Link></p>
       </MenuItem>
       <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p><Link style={{color: "#000000"}} href="/messages">Messages</Link></p>
-      </MenuItem>
-      <MenuItem>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
@@ -180,11 +172,6 @@ export default function PrimarySearchAppBar({params}) {
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="default">
                 <GroupsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
               </Badge>
             </IconButton>
             <IconButton

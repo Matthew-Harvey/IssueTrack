@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, Grid, Link } from '@mui/material';
 
 export default function home() {
-    const [isAuth, setAuth] = useState(false);
+    const [isAuth, setAuth] = useState(null);
     const [username, setUsername] = useState("");
 
     useEffect( () => {

@@ -20,11 +20,8 @@ export default async function ValidateRegister(req: NextApiRequest, res: NextApi
       const q = query(user_collection, where("name", "==", username));
       let snapshot = await getDocs(q);
       snapshot.forEach(docSnap => {
-          var userdata = docSnap.data();
-          if (userdata.name === username) {
-              canAdd = false;
-              err = err + " Username already exists."
-          }
+          canAdd = false;
+          err = err + " Username already exists."
       });
     }
     if (canAdd === true) {

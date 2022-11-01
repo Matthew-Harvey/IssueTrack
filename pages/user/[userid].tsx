@@ -14,7 +14,7 @@ export default function UserProfile() {
   const { userid } = router.query;
 
   const [isFound, setFound] = useState(null);
-  const [isAuth, setAuth] = useState(false);
+  const [isAuth, setAuth] = useState(null);
   const [userEmail, setEmail] = useState("");
   const [userStatus, setStatus] = useState("");
 

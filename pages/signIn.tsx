@@ -49,13 +49,13 @@ export default function signIn() {
     e.preventDefault();
     const getValid = await axios.get('/api/login/ValidateLogin', {
       params: {
-        username: loginUsername,
+        username: loginUsername.toLowerCase(),
         password: loginPassword,
       }
     })
     if (getValid.data.isFound == true) {
-      Cookies.set('login_info', loginUsername + "," + getValid.data.id, { secure: true })
-      router.push({pathname: '/home', query: { username: loginUsername, pass: loginPassword}}, '/home', { shallow: true });
+      Cookies.set('login_info', loginUsername.toLowerCase() + "," + getValid.data.id, { secure: true })
+      router.push({pathname: '/home', query: { username: loginUsername.toLowerCase(), pass: loginPassword}}, '/home', { shallow: true });
     } else {
       document.getElementById("err").innerText = "User not found.";
       setLoginLoading(false);
@@ -66,15 +66,15 @@ export default function signIn() {
     e.preventDefault();
     const getValid = await axios.get('/api/login/ValidateRegister', {
       params: {
-        username: registerUsername,
+        username: registerUsername.toLowerCase(),
         password: registerPassword,
         email: registerEmail,
         confpassword: registerConf,
       }
     })
     if (getValid.data.isAdded == true) {
-      Cookies.set('login_info', registerUsername + "," + getValid.data.id, { secure: true })
-      router.push({pathname: '/home', query: { username: registerUsername, pass: registerPassword}}, '/home', { shallow: true });
+      Cookies.set('login_info', registerUsername.toLowerCase() + "," + getValid.data.id, { secure: true })
+      router.push({pathname: '/home', query: { username: registerUsername.toLowerCase(), pass: registerPassword}}, '/home', { shallow: true });
     } else {
       document.getElementById("err").innerText = getValid.data.error;
       setRegisterLoading(false);
