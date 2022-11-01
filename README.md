@@ -52,8 +52,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://issuetrack.vercel.app/)
-[product-screenshot]: /public/vercel.svg
+<a href="https://issuetrack.vercel.app/">
+    <img src="/public/vercel.svg" alt="Logo" width="100" height="100">
+</a>
 
 This project was made to demonstrate a variety of skills by producing a full stack app that allows users + teams to collaborate on issues within their systems.
 
@@ -63,10 +64,9 @@ This project was made to demonstrate a variety of skills by producing a full sta
 
 A list of the key technologies used within this project:
 
-[Next][React][TypeScript][CSS][HTML][Node.js]][MaterialUI][Axios]
+[Next][React][TypeScript][CSS][HTML][Node.js][MaterialUI][Axios]
 
 Deployed to Vercel - <a href="https://issuetrack.vercel.app/">https://issuetrack.vercel.app/</a>
-
 
 [HTML]: https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white
 [CSS]: https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white
