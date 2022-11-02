@@ -22,11 +22,8 @@ export default function UserProfile() {
   const [userStatus, setStatus] = useState("");
 
   useEffect( () => {
-    const fetchData = async () => {
-      const response = await axios.get('/api/user/GetUserInfo?userid=' + userid);
-      setFound(response.data.isFound);
-      setEmail(response.data.email);
-      setStatus(response.data.status);
+    if(!userid) {
+      return;
     }
     const fetchAuth = async () => {
       if (getCookie('login_info') != undefined) {
@@ -39,9 +36,15 @@ export default function UserProfile() {
           }
       }
     }
-    fetchAuth();
+    const fetchData = async () => {
+      const response = await axios.get('/api/user/GetUserInfo?userid=' + userid);
+      setFound(response.data.isFound);
+      setEmail(response.data.email);
+      setStatus(response.data.status);
+    }
     fetchData();
-  }, [userid, isFound, isAuth]);
+    fetchAuth();
+  }, [userid]);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -182,3 +185,4 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+

@@ -14,11 +14,9 @@ export default async function GetUserInfo(req: NextApiRequest, res: NextApiRespo
     let snapshot = await getDocs(q);
     snapshot.forEach(docSnap => {
         var userdata = docSnap.data();
-        if (userdata.name === userid) {
-            isFound = true;
-            userEmail = userdata.email;
-            userStatus = userdata.status;
-        }
+        isFound = true;
+        userEmail = userdata.email;
+        userStatus = userdata.status;
     });
     res.status(200).json({isFound: isFound, username: userid, email: userEmail, status: userStatus});
 }
