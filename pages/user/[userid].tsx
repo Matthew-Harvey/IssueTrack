@@ -1,4 +1,4 @@
-import { Backdrop, Button, CircularProgress, Fade, Modal, TextField, Typography } from '@mui/material';
+import { Backdrop, Button, Card, CircularProgress, Fade, Modal, TextField, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -8,6 +8,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import Mynav from '../comps/Mynav';
+import { Pie } from 'react-chartjs-2';
+import 'chart.js/auto';
+
 
 export default function UserProfile() {
   const router = useRouter();
@@ -56,6 +59,33 @@ export default function UserProfile() {
     setStatus(value);
   }
 
+  const piedata = {
+    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    datasets: [
+      {
+        label: "Issues Tracked",
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.5)',
+          'rgba(54, 162, 235, 0.5)',
+          'rgba(255, 206, 86, 0.5)',
+          'rgba(75, 192, 192, 0.5)',
+          'rgba(153, 102, 255, 0.5)',
+          'rgba(255, 159, 64, 0.5)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   // SOME USER STATS
 
   // EDIT PROFILE - (CAN BE CHANGED IF OWNER), Description, Status/Last Online Date, Teams - optional to be public
@@ -81,7 +111,7 @@ export default function UserProfile() {
                   <Modal aria-labelledby="transition-modal-title" aria-describedby="transition-modal-description" open={open} onClose={handleClose} closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{timeout: 500,}}>
                     <Fade in={open}>
                       <Box sx={style}>
-                        <Typography id="transition-modal-title" variant="h5" component="h2">
+                        <Typography id="transition-modal-title" variant="h4" component="h4">
                           Details:
                         </Typography>
                         <br />
@@ -92,6 +122,23 @@ export default function UserProfile() {
                       </Box>
                     </Fade>
                   </Modal>
+                  <br />
+                  <Card>
+                    <Typography id="transition-modal-title" variant="h4" component="h4" style={{textAlign: "left", paddingLeft: "1em"}}>
+                        <u>Your Stats</u>
+                    </Typography>
+                    <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+                      <Grid item={true} xs={4}>
+                        <Pie data={piedata} />
+                      </Grid>
+                      <Grid item={true} xs={4}>
+                        <Pie data={piedata} />
+                      </Grid>
+                      <Grid item={true} xs={4}>
+                        <Pie data={piedata} />
+                      </Grid>
+                    </Grid>
+                  </Card>
                 </>
               }
             </Grid>
