@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import {firestore} from "../Firebase";
 import {getDocs, collection, query, where} from "@firebase/firestore";
-import axios from "axios";
+import bcrypt from "bcrypt";
 
 export default async function ValidateLogin(req: NextApiRequest, res: NextApiResponse) {
     const user_collection = collection(firestore, "users");
@@ -17,26 +17,11 @@ export default async function ValidateLogin(req: NextApiRequest, res: NextApiRes
         idmatch = docSnap.id;
         pass = userdata.pass;
     });
-    try {
-        const getValid = await axios.get('https://issuetrack.vercel.app/api/login/checkPass', {
-            params: {
-            pass1: password,
-            pass2: pass,
-            }
-        })
-        if (getValid.data.result == true) {
-            doesmatch = true;
+    await bcrypt.compare(password, pass, function(err, result) {
+        if (result == true) {
+            res.status(200).json({isFound: true, id: idmatch});
+        } else {
+            res.status(200).json({isFound: false, id: idmatch});
         }
-    } catch {
-        const getValid = await axios.get('http://localhost:3000/api/login/checkPass', {
-            params: {
-            pass1: password,
-            pass2: pass,
-            }
-        })
-        if (getValid.data.result == true) {
-            doesmatch = true;
-        }
-    }
-    res.status(200).json({isFound: doesmatch, id: idmatch});
+    });
 }
