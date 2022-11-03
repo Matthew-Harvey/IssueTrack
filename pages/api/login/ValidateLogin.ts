@@ -18,7 +18,7 @@ export default async function ValidateLogin(req: NextApiRequest, res: NextApiRes
         pass = userdata.pass;
     });
     try {
-        const getValid = await axios.get('https://issuetrack.vercel.app/api/login/CheckPass', {
+        const getValid = await axios.get('https://issuetrack.vercel.app/api/login/checkPass', {
             params: {
             pass1: password,
             pass2: pass,
@@ -28,7 +28,7 @@ export default async function ValidateLogin(req: NextApiRequest, res: NextApiRes
             doesmatch = true;
         }
     } catch {
-        const getValid = await axios.get('http://localhost:3000/api/login/CheckPass', {
+        const getValid = await axios.get('http://localhost:3000/api/login/checkPass', {
             params: {
             pass1: password,
             pass2: pass,
