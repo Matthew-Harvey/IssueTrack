@@ -26,7 +26,7 @@ export default async function ValidateRegister(req: NextApiRequest, res: NextApi
     }
     if (canAdd === true) {
       const hash = bcrypt.hashSync(password, 10);
-      await addDoc(collection(firestore, "users"), {name: username, pass: hash, email: email, status: "",}).then(function(docRef) { res.status(200).json({isAdded: true, id: docRef.id, error: ""});})
+      await addDoc(collection(firestore, "users"), {name: username, pass: hash, email: email, status: "", teams: {}}).then(function(docRef) { res.status(200).json({isAdded: true, id: docRef.id, error: ""});})
     } else {
       res.status(200).json({isAdded: false, id: "", error: err});
     }

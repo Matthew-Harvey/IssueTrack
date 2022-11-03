@@ -12,13 +12,13 @@ import Menu from '@mui/material/Menu';
 import BugReportOutlinedIcon from '@mui/icons-material/BugReportOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Link from '@mui/material/Link';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Tooltip } from '@mui/material';
 import Zoom from '@mui/material/Zoom';
-import LogoutIcon from '@mui/icons-material/Logout';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -102,66 +102,54 @@ export default function PrimarySearchAppBar({params}) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <a href="/home">
         <MenuItem>
-          <IconButton
-            sx={{color: "black" }}
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <GroupsIcon />
-          </IconButton>
-          <p style={{color: "black"}}>Teams</p>
+            <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="primary-search-account-menu"
+                aria-haspopup="true"
+                color="inherit"
+            >
+                <GroupsIcon />
+            </IconButton>
+            <p><Link style={{color: "#000000"}} href="/home">Teams</Link></p>
         </MenuItem>
-      </a>
-      <a href="/notifications">
         <MenuItem>
-          <IconButton
-            sx={{color: "black" }}
-            size="large"
-            aria-label="show 17 new notifications"
-            color="inherit"
-          >
+            <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+            >
             <Badge badgeContent={17} color="error">
-              <NotificationsIcon />
+                <NotificationsIcon />
             </Badge>
-          </IconButton>
-          <p style={{color: "black"}}>Notifications</p>
+            </IconButton>
+            <p><Link style={{color: "#000000"}} href="/notifications">Notifications</Link></p>
         </MenuItem>
-      </a>
-      <a href={profilepath}>
         <MenuItem>
-          <IconButton
-            sx={{color: "black" }}
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <p style={{color: "black"}}>{username}</p>
+            <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="primary-search-account-menu"
+                aria-haspopup="true"
+                color="inherit"
+            >
+                <AccountCircle />
+            </IconButton>
+            <p><Link style={{color: "#000000"}} href={profilepath}>{username}</Link></p>
         </MenuItem>
-      </a>
-      <a href="/">
         <MenuItem>
-          <IconButton
-            sx={{color: "black" }}
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <LogoutIcon />
-          </IconButton>
-          <p style={{color: "black"}}>Logout</p>
+            <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="primary-search-account-menu"
+                aria-haspopup="true"
+                color="inherit"
+            >
+                <LogoutIcon />
+            </IconButton>
+            <p>Logout</p>
         </MenuItem>
-      </a>
     </Menu>
   );
 
@@ -193,35 +181,44 @@ export default function PrimarySearchAppBar({params}) {
               />
             </Search>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Tooltip title="View Teams" TransitionComponent={Zoom}>
-              <IconButton size="large" aria-label="show 4 new mails" color="inherit" href="/teams" sx={{ "&:hover": { color: "white" } }}>
-                <Badge badgeContent={4} color="default">
-                    <GroupsIcon />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Notifications" TransitionComponent={Zoom}>
-              <IconButton size="large" aria-label="show 17 new notifications" color="inherit" href="/events" sx={{ "&:hover": { color: "white" } }}>
-                <Badge badgeContent={17} color="error">
-                    <NotificationsIcon />
-                </Badge>
-              </IconButton>
-            </Tooltip>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={4} color="default">
+                <GroupsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+            >
+              <Badge badgeContent={17} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
             <Tooltip title={loggedin} TransitionComponent={Zoom}>
-              <IconButton size="large" aria-label="account of current user" color="inherit" href={profilepath} sx={{ "&:hover": { color: "white" } }}>
-                <Badge color="default">
-                    <AccountCircle />
-                </Badge>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="LogOut" TransitionComponent={Zoom}>
-                <IconButton size="large" edge="end" aria-label="LogOut" aria-controls={menuId} color="inherit" href="/" sx={{ "&:hover": { color: "white" } }}>
-                    <LogoutIcon />
+              <Link href={profilepath} style={{color: "#FFFFFF"}}>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  color="inherit"
+                >
+                  <AccountCircle />
                 </IconButton>
+              </Link>
             </Tooltip>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton size="large" aria-label="show more" aria-controls={mobileMenuId} aria-haspopup="true" onClick={handleMobileMenuOpen} color="inherit">
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
               <MoreIcon />
             </IconButton>
           </Box>

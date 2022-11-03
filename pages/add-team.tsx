@@ -3,10 +3,11 @@ import { getCookie } from 'cookies-next';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, Grid, Link } from '@mui/material';
+import { Container } from '@mui/system';
 
 export default function home() {
     const [isAuth, setAuth] = useState(null);
-    const [userid, setUsername] = useState("");
+    const [username, setUsername] = useState("");
 
     useEffect( () => {
         const fetchAuth = async () => {
@@ -22,15 +23,15 @@ export default function home() {
             }
         }
         fetchAuth();
-    }, [isAuth, userid]);
+    }, [isAuth, username]);
 
     if (isAuth == true) {
         return (
             <>
-                <Mynav params={{username: userid}}/>
-                <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                    <p>YOU ARE LOGGED IN AS {userid}</p>
-                </Box>
+                <Mynav params={{username: username}}/>
+                <Container>
+                    
+                </Container>
             </>
         )
     } else if (isAuth == false){
@@ -39,7 +40,7 @@ export default function home() {
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
                     <Grid item={true} xs={12}>
                     <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                        <p>YOU ARE NOT LOGGED IN.</p>
+                        <p>You must login in order to create a new team.</p>
                     </Box>
                     <Box m="auto" display="flex" alignItems="center" justifyContent="center">
                         <Button><Link href='/'>Login/Register</Link></Button>

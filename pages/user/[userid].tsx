@@ -1,4 +1,4 @@
-import { Backdrop, Button, Card, CircularProgress, Fade, Modal, TextField, Typography } from '@mui/material';
+import { Backdrop, Button, Card, CircularProgress, Fade, Modal, Tab, Tabs, TextField, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -8,9 +8,41 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import Mynav from '../comps/Mynav';
-import { Pie } from 'react-chartjs-2';
+import { Pie, Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
 
 export default function UserProfile() {
   const router = useRouter();
@@ -63,32 +95,53 @@ export default function UserProfile() {
   }
 
   const piedata = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: ['Issues Created', 'Issues Assigned To You', 'Issues Assigned To Others', 'Issues Closed'],
     datasets: [
       {
         label: "Issues Tracked",
-        data: [12, 19, 3, 5, 2, 3],
+        data: [10, 20, 45, 12],
         backgroundColor: [
           'rgba(255, 99, 132, 0.5)',
           'rgba(54, 162, 235, 0.5)',
-          'rgba(255, 206, 86, 0.5)',
           'rgba(75, 192, 192, 0.5)',
-          'rgba(153, 102, 255, 0.5)',
-          'rgba(255, 159, 64, 0.5)',
+          'rgba(22, 10, 180, 0.5)',
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
           'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
           'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
+          'rgba(22, 10, 180, 0.5)',
         ],
         borderWidth: 1,
       },
     ],
   };
 
+  const linedata = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [
+      {
+        label: "Issues Created",
+        data: [33, 53, 85, 41, 44, 65],
+        fill: true,
+        backgroundColor: "rgba(75,192,192,0.2)",
+        borderColor: "rgba(75,192,192,1)"
+      },
+      {
+        label: "Issues Closed",
+        data: [33, 25, 35, 51, 54, 76],
+        fill: false,
+        borderColor: "#742774"
+      }
+    ]
+  };
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+  
   // SOME USER STATS
 
   // EDIT PROFILE - (CAN BE CHANGED IF OWNER), Description, Status/Last Online Date, Teams - optional to be public
@@ -100,48 +153,54 @@ export default function UserProfile() {
   if (isFound == true) {
     return (
       <>
-          <Mynav params={{username: userid}}/>
+          <Mynav params={{username: userid}} />
           <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
             <Grid item={true} xs={12}>
-              <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                <Avatar src="/vercel.svg" sx={{ width: 150, height: 150 }} style={{alignItems: 'center'}}/>
-              </Box>
-              <h1>{userid}</h1>
-              <h4>{userStatus}</h4>
               {isAuth == true &&
                 <>
-                  <Button onClick={handleOpen}>Edit Profile</Button>
-                  <Modal aria-labelledby="transition-modal-title" aria-describedby="transition-modal-description" open={open} onClose={handleClose} closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{timeout: 500,}}>
-                    <Fade in={open}>
-                      <Box sx={style}>
-                        <Typography id="transition-modal-title" variant="h4" component="h4">
-                          Details:
-                        </Typography>
-                        <br />
-                        <TextField style={{margin: "1em", marginLeft: "0em"}} disabled fullWidth id="outlined-multiline-flexible" label="Username" multiline maxRows={4} defaultValue={userid}/>
-                        <TextField style={{margin: "1em", marginLeft: "0em"}} fullWidth id="outlined-multiline-flexible" label="Email" multiline maxRows={4} defaultValue={userEmail} onChange={(e) => EmailChange(e.target.value)}/>
-                        <TextField style={{margin: "1em", marginLeft: "0em"}} fullWidth id="outlined-multiline-flexible" label="Status" multiline maxRows={4} defaultValue={userStatus} onChange={(e) => StatusChange(e.target.value)}/>
-                        <Button onClick={function(){ handleClose(); updateDetails(userid)}}>Submit</Button>
-                      </Box>
-                    </Fade>
-                  </Modal>
-                  <br />
-                  <Card>
-                    <Typography id="transition-modal-title" variant="h4" component="h4" style={{textAlign: "left", paddingLeft: "1em"}}>
-                        <u>Your Stats</u>
-                    </Typography>
-                    <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+                  <Box sx={{justifyContent: "center", textAlign: "center", padding: "1em"}}>
+                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                      <Tab label="Profile" {...a11yProps(0)} />
+                      <Tab label="Stats" {...a11yProps(1)} />
+                      <Tab label="Activity" {...a11yProps(2)} />
+                    </Tabs>
+                  </Box>
+                  <TabPanel value={value} index={0}>
+                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                      <Avatar src="/vercel.svg" sx={{ width: 150, height: 150 }} style={{alignItems: 'center'}}/>
+                    </Box>
+                    <h1>{userid}</h1>
+                    <h4>{userStatus}</h4>
+                    <Button onClick={handleOpen}>Edit Profile</Button>
+                    <Modal aria-labelledby="transition-modal-title" aria-describedby="transition-modal-description" open={open} onClose={handleClose} closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{timeout: 500,}}>
+                      <Fade in={open}>
+                        <Box sx={style}>
+                          <Typography id="transition-modal-title" variant="h4" component="h4">
+                            Details:
+                          </Typography>
+                          <br />
+                          <TextField style={{margin: "1em", marginLeft: "0em"}} disabled fullWidth id="outlined-multiline-flexible" label="Username" multiline maxRows={4} defaultValue={userid}/>
+                          <TextField style={{margin: "1em", marginLeft: "0em"}} fullWidth id="outlined-multiline-flexible" label="Email" multiline maxRows={4} defaultValue={userEmail} onChange={(e) => EmailChange(e.target.value)}/>
+                          <TextField style={{margin: "1em", marginLeft: "0em"}} fullWidth id="outlined-multiline-flexible" label="Status" multiline maxRows={4} defaultValue={userStatus} onChange={(e) => StatusChange(e.target.value)}/>
+                          <Button onClick={function(){ handleClose(); updateDetails(userid)}}>Submit</Button>
+                        </Box>
+                      </Fade>
+                    </Modal>
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    <Grid container spacing={1} style={{justifyContent: "center", textAlign: "center", padding: "2em"}}>
                       <Grid item={true} xs={4}>
                         <Pie data={piedata} />
                       </Grid>
-                      <Grid item={true} xs={4}>
-                        <Pie data={piedata} />
+                      <Grid item={true} xs={8}>
+                        <Line data={linedata} />
                       </Grid>
-                      <Grid item={true} xs={4}>
-                        <Pie data={piedata} />
-                      </Grid>
+                      
                     </Grid>
-                  </Card>
+                  </TabPanel>
+                  <TabPanel value={value} index={2}>
+                    Item Three
+                  </TabPanel>
                 </>
               }
             </Grid>

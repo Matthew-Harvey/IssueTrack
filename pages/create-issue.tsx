@@ -6,7 +6,7 @@ import { Box, Button, CircularProgress, Grid, Link } from '@mui/material';
 
 export default function home() {
     const [isAuth, setAuth] = useState(null);
-    const [userid, setUsername] = useState("");
+    const [username, setUsername] = useState("");
 
     useEffect( () => {
         const fetchAuth = async () => {
@@ -22,14 +22,14 @@ export default function home() {
             }
         }
         fetchAuth();
-    }, [isAuth, userid]);
+    }, [isAuth, username]);
 
     if (isAuth == true) {
         return (
             <>
-                <Mynav params={{username: userid}}/>
+                <Mynav params={{username: username}}/>
                 <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                    <p>YOU ARE LOGGED IN AS {userid}</p>
+                    <p>YOU ARE LOGGED IN AS {username}</p>
                 </Box>
             </>
         )
@@ -39,7 +39,7 @@ export default function home() {
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
                     <Grid item={true} xs={12}>
                     <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                        <p>YOU ARE NOT LOGGED IN.</p>
+                        <p>You must login in order to create an issue.</p>
                     </Box>
                     <Box m="auto" display="flex" alignItems="center" justifyContent="center">
                         <Button><Link href='/'>Login/Register</Link></Button>
