@@ -4,10 +4,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, Grid, Link, TextField } from '@mui/material';
 import { Container } from '@mui/system';
+import { useRouter } from 'next/router';
+import { LoadingButton } from '@mui/lab';
 
 export default function home() {
     const [isAuth, setAuth] = useState(null);
     const [username, setUsername] = useState("");
+    const router = useRouter();
 
     useEffect( () => {
         const fetchAuth = async () => {
@@ -37,32 +40,43 @@ export default function home() {
     const TeamNameChange = (value) => {
         setTeamName(value);
     }
+    const [team_overview, setTeamOverview] = useState("");
+    const TeamOverviewChange = (value) => {
+        setTeamOverview(value);
+    }
 
     const [addedmembers, setAddMember] = useState("");
     const [isMemberValid, setMemberValid] = useState("");
+    const [CreateMemberLoading, setCreateMemberLoading] = useState(false);
     const addmember = async function () {
+        setCreateMemberLoading(true);
         const response = await axios.get('/api/user/GetUserInfo?userid=' + team_member);
-        console.log(response.data.isFound, response.data.username);
         if (response.data.isFound == true) {
             setMemberValid("User found and added to team.");
-            setAddMember(addedmembers + " " + team_member);
+            if (addedmembers == "") {
+                setAddMember(addedmembers + team_member);
+            } else {
+                setAddMember(addedmembers + "," + team_member);
+            }
         } else {
             setMemberValid("User not found.");
         }
-        
+        setCreateMemberLoading(false);
     }
 
+    const [CreateTeamIsLoading, setCreateTeamLoading] = useState(false);
     const CreateTeam = async function () {
-        console.log(team_username, team_name, username, addedmembers);
-        var membersarr = addedmembers.split(" ");
-        await axios.post('/api/team/CreateTeam', {
+        setCreateTeamLoading(true);
+        await axios.get('/api/team/CreateTeam', {
             params: {
                 teamid: team_username,
                 teamname: team_name,
                 userid: username,
-                members: membersarr,
+                members: addedmembers,
+                overview: team_overview,
             }
         })
+        router.push({pathname: '/home', query: { username: username}}, '/home', { shallow: true });
     }
 
     if (isAuth == true) {
@@ -73,10 +87,11 @@ export default function home() {
                     <TextField id="teamusername" label="Team ID" variant="filled" value={team_username} onChange={(e) => TeamUsernameChange(e.target.value)} />
                     <TextField id="teamname" label="Team Name" variant="filled" value={team_name} onChange={(e) => TeamNameChange(e.target.value)} />
                     <TextField id="teammember" label="Add Member with Username" variant="filled" value={team_member} onChange={(e) => TeamMemberChange(e.target.value)} />
-                    <Button variant="contained" onClick={addmember} style={{margin: "1em"}}>Add Member</Button>
+                    <LoadingButton loading={CreateMemberLoading} variant="contained" onClick={addmember} style={{margin: "1em"}}>Add Member</LoadingButton>
                     <p>{isMemberValid}</p>
-                    <p>{addedmembers}</p>
-                    <Button variant="contained" onClick={CreateTeam} style={{margin: "1em"}}>Add Member</Button>
+                    <TextField placeholder="Team overview" multiline rows={2} maxRows={4} value={team_overview} onChange={(e) => TeamOverviewChange(e.target.value)}/>
+                    <p>Added Members: {addedmembers}</p>
+                    <LoadingButton loading={CreateTeamIsLoading} variant="contained" onClick={CreateTeam} style={{margin: "1em"}}>Create Team</LoadingButton>
                 </Container>
             </>
         )
