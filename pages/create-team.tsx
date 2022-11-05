@@ -2,7 +2,7 @@ import Mynav from './comps/Mynav';
 import { getCookie } from 'cookies-next';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Box, Button, CircularProgress, Grid, Link, TextField } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Grid, Link, TextField } from '@mui/material';
 import { Container } from '@mui/system';
 import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
@@ -45,54 +45,105 @@ export default function home() {
         setTeamOverview(value);
     }
 
+    const [isMemberErrorMessage, setMemberErrorMessage] = useState("");
+    const [isMemberErrorBoolean, setMemberErrorBoolean] = useState(false);
+    const [isMemberSuccessMessage, setMemberSuccessMessage] = useState("");
+    const [isMemberSuccessBoolean, setMemberSuccessBoolean] = useState(false);
+
     const [addedmembers, setAddMember] = useState("");
-    const [isMemberValid, setMemberValid] = useState("");
     const [CreateMemberLoading, setCreateMemberLoading] = useState(false);
-    const addmember = async function () {
+    const addmember = async function (e) {
         setCreateMemberLoading(true);
+        setMemberSuccessBoolean(false);
+        setMemberErrorBoolean(false);
         const response = await axios.get('/api/user/GetUserInfo?userid=' + team_member);
         if (response.data.isFound == true) {
-            setMemberValid("User found and added to team.");
             if (addedmembers == "") {
                 setAddMember(addedmembers + team_member);
             } else {
                 setAddMember(addedmembers + "," + team_member);
             }
+            setMemberSuccessBoolean(true);
+            setMemberSuccessMessage("User has been added...");
         } else {
-            setMemberValid("User not found.");
+            setMemberErrorBoolean(true);
+            setMemberErrorMessage("User has not been found...");
         }
         setCreateMemberLoading(false);
     }
 
     const [CreateTeamIsLoading, setCreateTeamLoading] = useState(false);
+    const [CreateTeamIsUniqueID, setTeamIsUniqueID] = useState(false);
     const CreateTeam = async function () {
         setCreateTeamLoading(true);
-        await axios.get('/api/team/CreateTeam', {
+        setTeamIsUniqueID(false);
+        const response = await axios.get('/api/team/CheckTeamID', {
             params: {
                 teamid: team_username,
-                teamname: team_name,
-                userid: username,
-                members: addedmembers,
-                overview: team_overview,
             }
         })
-        router.push({pathname: '/home', query: { username: username}}, '/home', { shallow: true });
+        if (response.data.isFound == false) {
+            await axios.get('/api/team/CreateTeam', {
+                params: {
+                    teamid: team_username,
+                    teamname: team_name,
+                    userid: username,
+                    members: addedmembers,
+                    overview: team_overview,
+                }
+            })
+            router.push({pathname: '/home', query: { username: username}}, '/home', { shallow: true });
+        } else {
+            setTeamIsUniqueID(true);
+        }
+        setCreateTeamLoading(false);
     }
 
     if (isAuth == true) {
         return (
             <>
                 <Mynav params={{username: username}}/>
-                <Container style={{padding: "1em"}}>
-                    <TextField id="teamusername" label="Team ID" variant="filled" value={team_username} onChange={(e) => TeamUsernameChange(e.target.value)} />
-                    <TextField id="teamname" label="Team Name" variant="filled" value={team_name} onChange={(e) => TeamNameChange(e.target.value)} />
-                    <TextField id="teammember" label="Add Member with Username" variant="filled" value={team_member} onChange={(e) => TeamMemberChange(e.target.value)} />
-                    <LoadingButton loading={CreateMemberLoading} variant="contained" onClick={addmember} style={{margin: "1em"}}>Add Member</LoadingButton>
-                    <p>{isMemberValid}</p>
-                    <TextField placeholder="Team overview" multiline rows={2} maxRows={4} value={team_overview} onChange={(e) => TeamOverviewChange(e.target.value)}/>
-                    <p>Added Members: {addedmembers}</p>
-                    <LoadingButton loading={CreateTeamIsLoading} variant="contained" onClick={CreateTeam} style={{margin: "1em"}}>Create Team</LoadingButton>
-                </Container>
+                <Box m="auto" display="flex" alignItems="center" justifyContent="center" style={{paddingTop: "2em"}}>
+                    <h2>Create a new team</h2>
+                </Box>
+                <Grid container spacing={0} style={{padding: "2em"}}>
+                    <TextField style={{padding: "1em"}} fullWidth id="teamusername" label="Team ID" variant="filled" value={team_username} onChange={(e) => TeamUsernameChange(e.target.value)} />
+                    <TextField style={{padding: "1em"}} fullWidth id="teamname" label="Team Name" variant="filled" value={team_name} onChange={(e) => TeamNameChange(e.target.value)} />
+                    <TextField style={{padding: "1em"}} fullWidth placeholder="Team overview" multiline rows={2} maxRows={4} value={team_overview} onChange={(e) => TeamOverviewChange(e.target.value)}/>
+                    <Grid item={true} xs={9}>
+                        <TextField style={{padding: "1em"}} fullWidth id="teammember" label="Add Member with Username" variant="filled" value={team_member} onChange={(e) => TeamMemberChange(e.target.value)} />
+                    </Grid>
+                    <Grid item={true} xs={3}>
+                        <LoadingButton loading={CreateMemberLoading} variant="contained" onClick={addmember} style={{margin: "1em", padding: "1em"}}>Add Member</LoadingButton>
+                    </Grid>
+                    <Grid item={true} xs={5}>
+                        <p style={{padding: "1em"}}><h5>Added Members: </h5> {addedmembers}</p>
+                    </Grid>
+                    {isMemberSuccessBoolean == true && (
+                        <>
+                            <Grid item={true} xs={7}>
+                                <Alert style={{ padding: "1em" }} severity="success">{isMemberSuccessMessage}</Alert>
+                            </Grid>
+                        </>
+                    )}
+                    {isMemberErrorBoolean == true && (
+                        <>
+                            <Grid item={true} xs={7}>
+                                <Alert style={{padding: "1em"}} severity="error">{isMemberErrorMessage}</Alert>
+                            </Grid>
+                        </>
+                    )}
+                    <Grid item={true} xs={12} style={{justifyContent: "center", textAlign: "left"}}>
+                        <LoadingButton loading={CreateTeamIsLoading} variant="contained" onClick={CreateTeam} style={{margin: "1em", paddingTop: "3em", padding: "1em"}}>Create Team</LoadingButton>
+                        {CreateTeamIsUniqueID == true && (
+                        <>
+                            <Grid item={true} xs={7}>
+                                <Alert style={{padding: "1em"}} severity="error">"Team ID is already in use"</Alert>
+                            </Grid>
+                        </>
+                    )}
+                    </Grid>
+                </Grid>
             </>
         )
     } else if (isAuth == false){

@@ -86,6 +86,7 @@ export default function PrimarySearchAppBar({params}) {
   const menuId = 'primary-search-account-menu';
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
+
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -196,7 +197,7 @@ export default function PrimarySearchAppBar({params}) {
             <Tooltip title="View Teams" TransitionComponent={Zoom}>
               <IconButton size="large" aria-label="show 4 new mails" color="inherit" href="/teams" sx={{ "&:hover": { color: "white" } }}>
                 <Badge badgeContent={4} color="default">
-                    <GroupsIcon />
+                  <GroupsIcon />
                 </Badge>
               </IconButton>
             </Tooltip>
