@@ -52,6 +52,7 @@ export default function UserProfile() {
   const [isAuth, setAuth] = useState(null);
   const [userEmail, setEmail] = useState("");
   const [userStatus, setStatus] = useState("");
+  const [createdUser, setCreatedUser] = useState("");
 
   useEffect( () => {
     if(!userid) {
@@ -73,12 +74,13 @@ export default function UserProfile() {
       setFound(response.data.isFound);
       setEmail(response.data.email);
       setStatus(response.data.status);
+      setCreatedUser(response.data.created);
     }
     fetchData();
     fetchAuth();
   }, [userid]);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -170,7 +172,8 @@ export default function UserProfile() {
                       <Avatar src="/vercel.svg" sx={{ width: 150, height: 150 }} style={{alignItems: 'center'}}/>
                     </Box>
                     <h1>{userid}</h1>
-                    <h4>{userStatus}</h4>
+                    <h4>Status: {userStatus}</h4>
+                    <h5>Joined: {createdUser}</h5>
                     <Button onClick={handleOpen}>Edit Profile</Button>
                     <Modal aria-labelledby="transition-modal-title" aria-describedby="transition-modal-description" open={open} onClose={handleClose} closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{timeout: 500,}}>
                       <Fade in={open}>
