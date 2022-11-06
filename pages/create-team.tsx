@@ -22,7 +22,11 @@ export default function home() {
                 if (getAuth.data.isAuth == true) {
                     setAuth(getAuth.data.isAuth);
                     setUsername(getAuth.data.name);
+                } else {
+                    setAuth(getAuth.data.isAuth);
                 }
+            } else {
+                setAuth(false);
             }
         }
         fetchAuth();

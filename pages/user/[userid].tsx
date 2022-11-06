@@ -66,7 +66,11 @@ export default function UserProfile() {
           const getAuth = await axios.get("/api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
           if (getAuth.data.isAuth == true) {
               setAuth(getAuth.data.isAuth);
-          }
+          } else {
+            setAuth(getAuth.data.isAuth);
+        }
+      } else {
+        setAuth(false);
       }
     }
     const fetchData = async () => {

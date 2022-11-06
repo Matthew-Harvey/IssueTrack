@@ -25,7 +25,11 @@ export default function Ticket() {
             if (getAuth.data.isAuth == true) {
                 setAuth(getAuth.data.isAuth);
                 setUserId(username_cookie);
-            }
+            } else {
+              setAuth(getAuth.data.isAuth);
+          }
+        } else {
+          setAuth(false);
         }
       }
       fetchAuth();
