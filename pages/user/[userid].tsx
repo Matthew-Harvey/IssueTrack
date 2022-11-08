@@ -173,7 +173,7 @@ export default function UserProfile() {
                   </Box>
                   <TabPanel value={value} index={0}>
                     <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                      <Avatar src="/vercel.svg" sx={{ width: 150, height: 150 }} style={{alignItems: 'center'}}/>
+                      <Avatar src="/vercel.svg" sx={{ width: 200, height: 200 }} style={{alignItems: 'center'}}/>
                     </Box>
                     <h1>{userid}</h1>
                     <h4>Status: {userStatus}</h4>
@@ -229,12 +229,12 @@ export default function UserProfile() {
   } else {
     return (
       <>
-          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
-            <Grid item={true} xs={12}>
-              <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                <CircularProgress />
-              </Box>
-            </Grid>
+          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
+              <Grid item={true} xs={12}>
+                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                    <CircularProgress />
+                </Box>
+              </Grid>
           </Grid>
       </>
     )

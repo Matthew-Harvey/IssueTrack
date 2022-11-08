@@ -3,7 +3,6 @@ import { getCookie } from 'cookies-next';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Alert, Box, Button, CircularProgress, Grid, Link, TextField } from '@mui/material';
-import { Container } from '@mui/system';
 import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
 
@@ -54,8 +53,9 @@ export default function home() {
     const [isMemberSuccessMessage, setMemberSuccessMessage] = useState("");
     const [isMemberSuccessBoolean, setMemberSuccessBoolean] = useState(false);
 
-    const [addedmembers, setAddMember] = useState("");
+    const [addedmembers, setAddMember] = useState(username);
     const [CreateMemberLoading, setCreateMemberLoading] = useState(false);
+    var addedarr = [username];
     const addmember = async function (e) {
         setCreateMemberLoading(true);
         setMemberSuccessBoolean(false);
@@ -67,6 +67,7 @@ export default function home() {
             } else {
                 setAddMember(addedmembers + "," + team_member);
             }
+            addedarr.push(team_member);
             setMemberSuccessBoolean(true);
             setMemberSuccessMessage("User has been added...");
         } else {
@@ -87,6 +88,14 @@ export default function home() {
             }
         })
         if (response.data.isFound == false) {
+            for (var user in addedarr) {
+                await axios.get('/api/user/UpdateUserTeam', {
+                    params: {
+                        userid: user,
+                        teamid: team_username,
+                    }
+                })
+            }
             await axios.get('/api/team/CreateTeam', {
                 params: {
                     teamid: team_username,
@@ -168,9 +177,9 @@ export default function home() {
     } else {
         return (
             <>
-                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
                     <Grid item={true} xs={12}>
-                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                    <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
                         <CircularProgress />
                     </Box>
                     </Grid>

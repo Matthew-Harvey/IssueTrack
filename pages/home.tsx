@@ -55,9 +55,9 @@ export default function home() {
     } else {
         return (
             <>
-                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
                     <Grid item={true} xs={12}>
-                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                    <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
                         <CircularProgress />
                     </Box>
                     </Grid>

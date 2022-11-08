@@ -16,7 +16,7 @@ export default function Ticket() {
       if(!issueid) {
         return;
       }
-      const fetchAuth = async () => { // AUTH NEEDS TO BE INDIVIDUAL WHO CREATED TICKET OR IS A TEAM TICKET THEN ALL TEAM CAN VIEW/EDIT
+      const fetchAuth = async () => {
         if (getCookie('login_info') != undefined) {
             var strsplit = getCookie('login_info').toString().split(",");
             var username_cookie = strsplit[0];
@@ -33,7 +33,8 @@ export default function Ticket() {
         }
       }
       fetchAuth();
-    }, [issueid]);
+      // ADDITIONAL AUTH TO SEE IF PART OF TEAM THAT CAN VIEW TICKET OR INDIVIDUAL.
+    }, [issueid, isAuth]);
   
     if (isAuth == true) {
       return (
@@ -56,13 +57,13 @@ export default function Ticket() {
     } else {
       return (
         <>
-            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
               <Grid item={true} xs={12}>
-                <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                  <CircularProgress />
+                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                    <CircularProgress />
                 </Box>
               </Grid>
-            </Grid>
+          </Grid>
         </>
       )
     }
