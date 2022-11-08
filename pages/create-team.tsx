@@ -28,6 +28,9 @@ export default function home() {
                 setAuth(false);
             }
         }
+        if (addedmembers == "") {
+            setAddMember(username);
+        }
         fetchAuth();
     }, [isAuth, username]);
 
@@ -53,26 +56,32 @@ export default function home() {
     const [isMemberSuccessMessage, setMemberSuccessMessage] = useState("");
     const [isMemberSuccessBoolean, setMemberSuccessBoolean] = useState(false);
 
-    const [addedmembers, setAddMember] = useState(username);
+    const [addedmembers, setAddMember] = useState("");
+    
     const [CreateMemberLoading, setCreateMemberLoading] = useState(false);
-    var addedarr = [username];
     const addmember = async function (e) {
         setCreateMemberLoading(true);
         setMemberSuccessBoolean(false);
         setMemberErrorBoolean(false);
-        const response = await axios.get('/api/user/GetUserInfo?userid=' + team_member);
-        if (response.data.isFound == true) {
-            if (addedmembers == "") {
-                setAddMember(addedmembers + team_member);
-            } else {
+        var addedarr = addedmembers.split(",");
+        var testarr = addedarr;
+        testarr.push(team_member);
+        function hasDuplicates(array) {
+            return (new Set(array)).size !== array.length;
+        }
+        if (hasDuplicates(testarr) == false) {
+            const response = await axios.get('/api/user/GetUserInfo?userid=' + team_member);
+            if (response.data.isFound == true) {
                 setAddMember(addedmembers + "," + team_member);
+                setMemberSuccessBoolean(true);
+                setMemberSuccessMessage("User has been added...");
+            } else {
+                setMemberErrorBoolean(true);
+                setMemberErrorMessage("User has not been found...");
             }
-            addedarr.push(team_member);
-            setMemberSuccessBoolean(true);
-            setMemberSuccessMessage("User has been added...");
         } else {
             setMemberErrorBoolean(true);
-            setMemberErrorMessage("User has not been found...");
+            setMemberErrorMessage("Member is already added to this team...");
         }
         setCreateMemberLoading(false);
     }
@@ -88,6 +97,7 @@ export default function home() {
             }
         })
         if (response.data.isFound == false) {
+            var addedarr = addedmembers.split(",");
             for (var user in addedarr) {
                 await axios.get('/api/user/UpdateUserTeam', {
                     params: {
@@ -151,7 +161,7 @@ export default function home() {
                         {CreateTeamIsUniqueID == true && (
                         <>
                             <Grid item={true} xs={7}>
-                                <Alert style={{padding: "1em"}} severity="error">"Team ID is already in use"</Alert>
+                                <Alert style={{padding: "1em"}} severity="error">Team ID is already in use</Alert>
                             </Grid>
                         </>
                     )}
