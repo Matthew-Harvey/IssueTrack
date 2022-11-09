@@ -122,6 +122,13 @@ export default function home() {
         setCreateTeamLoading(false);
     }
 
+    const [ResetMemberLoading, setResetMemberLoading] = useState(false);
+    const resetmember = async function (e) {
+        setResetMemberLoading(true);
+        setAddMember(username);
+        setResetMemberLoading(false);
+    }
+
     if (isAuth == true) {
         return (
             <>
@@ -133,11 +140,14 @@ export default function home() {
                     <TextField style={{padding: "1em"}} fullWidth id="teamusername" label="Team ID" variant="filled" value={team_username} onChange={(e) => TeamUsernameChange(e.target.value)} />
                     <TextField style={{padding: "1em"}} fullWidth id="teamname" label="Team Name" variant="filled" value={team_name} onChange={(e) => TeamNameChange(e.target.value)} />
                     <TextField style={{padding: "1em"}} fullWidth placeholder="Team overview" multiline rows={2} maxRows={4} value={team_overview} onChange={(e) => TeamOverviewChange(e.target.value)}/>
-                    <Grid item={true} xs={9}>
+                    <Grid item={true} xs={8}>
                         <TextField style={{padding: "1em"}} fullWidth id="teammember" label="Add Member with Username" variant="filled" value={team_member} onChange={(e) => TeamMemberChange(e.target.value)} />
                     </Grid>
-                    <Grid item={true} xs={3}>
+                    <Grid item={true} xs={2}>
                         <LoadingButton loading={CreateMemberLoading} variant="contained" onClick={addmember} style={{margin: "1em", padding: "1em"}}>Add Member</LoadingButton>
+                    </Grid>
+                    <Grid item={true} xs={2}>
+                        <LoadingButton loading={ResetMemberLoading} variant="contained" onClick={resetmember} style={{margin: "1em", padding: "1em"}}>Reset Members</LoadingButton>
                     </Grid>
                     <Grid item={true} xs={5}>
                         <p style={{padding: "1em"}}><h5>Added Members: </h5> {addedmembers}</p>
