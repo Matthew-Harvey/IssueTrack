@@ -2,12 +2,12 @@ import Mynav from './comps/Mynav';
 import { getCookie } from 'cookies-next';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Box, Button, CircularProgress, Grid, InputLabel, Link, MenuItem, Select, Stack, Switch, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Grid, InputLabel, Link, MenuItem, Select, Stack, Switch, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import { DesktopDatePicker, LoadingButton } from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
 
 
-export default function home() {
+export default function IssueCreate() {
     const [isAuth, setAuth] = useState(null);
     const [username, setUsername] = useState("");
     const router = useRouter();
@@ -73,9 +73,59 @@ export default function home() {
     };
 
     const [assignval, setAssignVal] = useState(false);
+    
+    const [teamusername, setTeamUsername] = useState("");
+    const teamusernameChange = (value) => {
+        setTeamUsername(value);
+    };
 
-    // ISSUE NAME, ISSUE SUMMARY, ISSUE STATUS (Backlog, WIP, Blocked, Complete, Closed), ESTIMATED TIME REQUIRED (decimal of hours), TAGS, ATTACHMENTS, 
-    // ASSIGNED TO (IF TEAM, ASK WHO IS RESPONSIBLE - using add team member), CHECKLIST, DEADLINE
+    const [CheckTeamIDIsLoading, setCheckTeamIDLoading] = useState(false);
+    const [CheckTeamIDIsUnique, setTeamIDIsUnique] = useState("");
+    const CreateIssue = async function () {
+        setCheckTeamIDLoading(true);
+        setTeamIDIsUnique("true");
+        if (assignval == true) {
+            const response = await axios.get('/api/team/CheckTeamID', {
+                params: {
+                    teamid: teamusername,
+                }
+            })
+            if (response.data.isFound == false) {
+                await axios.get('/api/issue/CreateIssue', {
+                    params: {
+                        issueName: issueName,
+                        issueSummary: issueSummary,
+                        issuePriority: issuePriority,
+                        issueStatus: issueStatus,
+                        issueTimeRequirement: issueTimeRequirement,
+                        deadlinedate: deadlinedate,
+                        assignval: assignval,
+                        teamusername: teamusername,
+                        username: username,
+                    }
+                });
+                router.push({pathname: '/home', query: { username: username }}, '/home', { shallow: true });
+            } else {
+                setTeamIDIsUnique("false");
+            }
+        } else {
+            await axios.get('/api/issue/CreateIssue', {
+                params: {
+                    issueName: issueName,
+                    issueSummary: issueSummary,
+                    issuePriority: issuePriority,
+                    issueStatus: issueStatus,
+                    issueTimeRequirement: issueTimeRequirement,
+                    deadlinedate: deadlinedate,
+                    assignval: assignval,
+                    teamusername: teamusername,
+                    username: username,
+                }
+            });
+            router.push({pathname: '/home', query: { username: username }}, '/home', { shallow: true });
+        }
+        setCheckTeamIDLoading(false);
+    }
 
     if (isAuth == true) {
         return (
@@ -88,18 +138,18 @@ export default function home() {
                     <TextField style={{padding: "1em", width: "60%"}} id="issueName" label="Name" placeholder="Issue Name" variant="standard" value={issueName} onChange={(e) => issueNameChange(e.target.value)} />
                     <InputLabel style={{padding: "1em"}} id="issuePriority">Issue Priority</InputLabel>
                     <Select style={{margin: "1em"}} labelId="Issue Priority" id="issuePriority" value={issuePriority} label="Issue Priority" onChange={(e) => issuePriorityChange(e.target.value)}>
-                        <MenuItem value={40}>Urgent</MenuItem>
-                        <MenuItem value={30}>High</MenuItem>
-                        <MenuItem value={20}>Medium</MenuItem>
-                        <MenuItem value={10}>Low</MenuItem>
+                        <MenuItem value="Urgent">Urgent</MenuItem>
+                        <MenuItem value="High">High</MenuItem>
+                        <MenuItem value="Medium">Medium</MenuItem>
+                        <MenuItem value="Low">Low</MenuItem>
                     </Select>
                     <InputLabel style={{padding: "1em"}} id="issueStatus">Issue Status</InputLabel>
                     <Select style={{margin: "1em"}} labelId="Issue Status" id="issueStatus" value={issueStatus} label="Issue Status" onChange={(e) => issueStatusChange(e.target.value)}>
-                        <MenuItem value={10}>Backlog</MenuItem>
-                        <MenuItem value={20}>WIP</MenuItem>
-                        <MenuItem value={30}>Blocked</MenuItem>
-                        <MenuItem value={40}>Complete</MenuItem>
-                        <MenuItem value={50}>Closed</MenuItem>
+                        <MenuItem value="Backlog">Backlog</MenuItem>
+                        <MenuItem value="WIP">WIP</MenuItem>
+                        <MenuItem value="Blocked">Blocked</MenuItem>
+                        <MenuItem value="Complete">Complete</MenuItem>
+                        <MenuItem value="Closed">Closed</MenuItem>
                     </Select>
                     <TextField style={{padding: "1em"}} variant="standard" fullWidth label="Summary" placeholder="Issue Summary" multiline rows={4} value={issueSummary} onChange={(e) => issueSummaryChange(e.target.value)}/>
                     <TextField type={"number"} style={{padding: "1em"}} id="issueTimeRequirement" label="Estimated Time" placeholder="Estimated Time Required" variant="standard" value={issueTimeRequirement} onChange={(e) => issueTimeRequirementChange(e.target.value)} />
@@ -124,14 +174,28 @@ export default function home() {
                         <>
                             <Grid item={true} xs={1}>
                             </Grid>
-                            <Grid item={true} xs={3}>
-                                <TextField style={{padding: "1em"}} fullWidth id="issueAssignTeam" label="Username" placeholder="Team Username" variant="standard" value={null} />
+                            <Grid item={true} xs={6}>
+                                <TextField style={{padding: "1em"}} fullWidth id="issueAssignTeam" label="Team Username" placeholder="Team Username" variant="standard" value={teamusername} onChange={(e) => teamusernameChange(e.target.value)} />
                             </Grid>
-                            <Grid item={true} xs={2}>
-                                <LoadingButton loading={false} variant="contained" onClick={null} style={{margin: "1em", padding: "1em"}}>Confirm Username</LoadingButton>
-                            </Grid>
+                            {CheckTeamIDIsUnique == "true" && (
+                                <>
+                                    <Grid item={true} xs={7}>
+                                        <Alert style={{ padding: "1em" }} severity="success">Found team.</Alert>
+                                    </Grid>
+                                </>
+                            )}
+                            {CheckTeamIDIsUnique == "false" && (
+                                <>
+                                    <Grid item={true} xs={7}>
+                                        <Alert style={{padding: "1em"}} severity="error">Team does not exist.</Alert>
+                                    </Grid>
+                                </>
+                            )}
                         </>
                     )}
+                    <Grid item={true} xs={3}>
+                        <LoadingButton loading={CheckTeamIDIsLoading} variant="contained" onClick={CreateIssue} style={{margin: "1em", padding: "1em"}}>Create Issue</LoadingButton>
+                    </Grid>
                 </Grid>
             </>
         )

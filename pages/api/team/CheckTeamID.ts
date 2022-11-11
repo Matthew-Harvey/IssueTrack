@@ -14,5 +14,5 @@ export default async function CheckTeamID(req: NextApiRequest, res: NextApiRespo
         foundid = userdata.id;
         isFound = true;
     });
-    res.status(200).json({isFound: isFound, FoundID: foundid});
+    res.status(200).json({isFound: isFound, teamID: foundid});
 }

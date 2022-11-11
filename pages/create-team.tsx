@@ -6,7 +6,7 @@ import { Alert, Box, Button, CircularProgress, Grid, Link, TextField } from '@mu
 import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
 
-export default function home() {
+export default function TeamCreate() {
     const [isAuth, setAuth] = useState(null);
     const [username, setUsername] = useState("");
     const router = useRouter();
@@ -140,16 +140,14 @@ export default function home() {
                     <TextField style={{padding: "1em"}} fullWidth id="teamusername" label="Team ID" variant="filled" value={team_username} onChange={(e) => TeamUsernameChange(e.target.value)} />
                     <TextField style={{padding: "1em"}} fullWidth id="teamname" label="Team Name" variant="filled" value={team_name} onChange={(e) => TeamNameChange(e.target.value)} />
                     <TextField style={{padding: "1em"}} fullWidth placeholder="Team overview" multiline rows={2} maxRows={4} value={team_overview} onChange={(e) => TeamOverviewChange(e.target.value)}/>
-                    <Grid item={true} xs={8}>
+                    <Grid item={true} xs={6}>
                         <TextField style={{padding: "1em"}} fullWidth id="teammember" label="Add Member with Username" variant="filled" value={team_member} onChange={(e) => TeamMemberChange(e.target.value)} />
                     </Grid>
-                    <Grid item={true} xs={2}>
+                    <Grid item={true} xs={6}>
                         <LoadingButton loading={CreateMemberLoading} variant="contained" onClick={addmember} style={{margin: "1em", padding: "1em"}}>Add Member</LoadingButton>
-                    </Grid>
-                    <Grid item={true} xs={2}>
                         <LoadingButton loading={ResetMemberLoading} variant="contained" onClick={resetmember} style={{margin: "1em", padding: "1em"}}>Reset Members</LoadingButton>
                     </Grid>
-                    <Grid item={true} xs={5}>
+                    <Grid item={true} xs={8} alignItems="center" justifyContent="center">
                         <p style={{padding: "1em"}}><h5>Added Members: </h5> {addedmembers}</p>
                     </Grid>
                     {isMemberSuccessBoolean == true && (
