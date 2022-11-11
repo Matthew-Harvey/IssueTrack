@@ -93,6 +93,7 @@ export default function IssueCreate() {
             if (response.data.isFound == false) {
                 await axios.get('/api/issue/CreateIssue', {
                     params: {
+                        issueID: issueID,
                         issueName: issueName,
                         issueSummary: issueSummary,
                         issuePriority: issuePriority,
@@ -111,6 +112,7 @@ export default function IssueCreate() {
         } else {
             await axios.get('/api/issue/CreateIssue', {
                 params: {
+                    issueID: issueID,
                     issueName: issueName,
                     issueSummary: issueSummary,
                     issuePriority: issuePriority,

@@ -11,6 +11,7 @@ export default async function GetUserInfo(req: NextApiRequest, res: NextApiRespo
     var userEmail = "";
     var userStatus = "";
     var usercreated = "";
+    var userteams = "";
     const q = query(user_collection, where("name", "==", userid));
     let snapshot = await getDocs(q);
     snapshot.forEach(docSnap => {
@@ -19,6 +20,7 @@ export default async function GetUserInfo(req: NextApiRequest, res: NextApiRespo
         userEmail = userdata.email;
         userStatus = userdata.status;
         usercreated = userdata.created;
+        userteams = userdata.teams;
     });
-    res.status(200).json({isFound: isFound, username: userid, email: userEmail, status: userStatus, created: usercreated});
+    res.status(200).json({isFound: isFound, username: userid, email: userEmail, status: userStatus, created: usercreated, teams: userteams});
 }
