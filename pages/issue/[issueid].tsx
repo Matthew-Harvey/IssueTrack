@@ -56,13 +56,17 @@ export default function Ticket() {
                 doesmatch = true;
               }
             }
-            if (doesmatch == false) {
+            if (doesmatch == true) {
+              setcanView(true);
+            } else {
               setcanView(false);
             }
           } else {
             // individual issue - check if auth user is same as issue created user.
             if (getIssue.data.username != userid) {
               setcanView(false);
+            } else {
+              setcanView(true);
             }
           }
           setIssueObj(getIssue.data);
@@ -71,7 +75,7 @@ export default function Ticket() {
       getIssueInfo();
     }, [issueid, canView]);
   
-    if (isAuth == true && canView == false) {
+    if (isAuth == true && canView == true) {
       return (
         <>
             <Mynav params={{username: userid}}/>
