@@ -11,12 +11,10 @@ export default function Ticket() {
 
     const [isAuth, setAuth] = useState(null);
     const [userid, setUserId] = useState("");
+    const [canView, setcanView] = useState(null);
     const [IssueObj, setIssueObj] = useState(Object());
-  
+
     useEffect( () => {
-      if(!issueid) {
-        return;
-      }
       const fetchAuth = async () => {
         if (getCookie('login_info') != undefined) {
             var strsplit = getCookie('login_info').toString().split(",");
@@ -34,12 +32,18 @@ export default function Ticket() {
         }
       }
       fetchAuth();
+    }, [isAuth]);
+  
+    useEffect( () => {
+      if(!issueid) {
+        return;
+      }
       // ADDITIONAL AUTH TO SEE IF PART OF TEAM THAT CAN VIEW TICKET OR INDIVIDUAL.
       // Get info of issue with id passed
       const getIssueInfo = async () => {
         const getIssue = await axios.get("/api/issue/GetIssueInfo", {params: {issueID: issueid}});
         if (getIssue.data.isFound == false) {
-          setAuth(false);
+          setcanView(false);
         } else {
           if (getIssue.data.assignval == true) {
             // check team users
@@ -53,28 +57,39 @@ export default function Ticket() {
               }
             }
             if (doesmatch == false) {
-              setAuth(false);
+              setcanView(false);
             }
           } else {
             // individual issue - check if auth user is same as issue created user.
             if (getIssue.data.username != userid) {
-              setAuth(false);
+              setcanView(false);
             }
           }
           setIssueObj(getIssue.data);
         }
       }
       getIssueInfo();
-    }, [issueid, isAuth]);
+    }, [issueid, canView]);
   
-    if (isAuth == true) {
+    if (isAuth == true && canView == false) {
       return (
         <>
             <Mynav params={{username: userid}}/>
-            <p>{IssueObj.username}</p>
+            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+              <Grid item={true} xs={12}>
+                <h2>{IssueObj.issueName}</h2>
+                <h4>{IssueObj.issueSummary}</h4>
+                <p>{IssueObj.issuePriority}</p>
+                <p>{IssueObj.issueStatus}</p>
+                <p>{IssueObj.issueTimeRequirement}</p>
+                <p>{IssueObj.deadlinedate}</p>
+                <p>{IssueObj.lastupdated}</p>
+                <p>{IssueObj.lastupdated_date}</p>
+              </Grid>
+            </Grid>
         </>
       )
-    } else if (isAuth == false) {
+    } else if (isAuth == false || canView == false) {
       return (
         <>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>

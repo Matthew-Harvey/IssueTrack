@@ -28,6 +28,7 @@ export default async function GetIssueInfo(req: NextApiRequest, res: NextApiResp
         var issuedata = docSnap.data();
         isFound = true;
         issueID = issuedata.issueID;
+        issueName = issuedata.issueName;
         issueSummary = issuedata.issueSummary;
         issuePriority = issuedata.issuePriority;
         issueStatus = issuedata.issueStatus;

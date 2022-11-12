@@ -83,14 +83,15 @@ export default function IssueCreate() {
     const [CheckTeamIDIsUnique, setTeamIDIsUnique] = useState("");
     const CreateIssue = async function () {
         setCheckTeamIDLoading(true);
-        setTeamIDIsUnique("true");
+        setTeamIDIsUnique("null");
         if (assignval == true) {
             const response = await axios.get('/api/team/CheckTeamID', {
                 params: {
                     teamid: teamusername,
                 }
             })
-            if (response.data.isFound == false) {
+            console.log(teamusername, response.data.isFound)
+            if (response.data.isFound == true) {
                 await axios.get('/api/issue/CreateIssue', {
                     params: {
                         issueID: issueID,
