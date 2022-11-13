@@ -66,8 +66,7 @@ export default function PrimarySearchAppBar({params}) {
   var loggedin = "";
   try {
     profilepath = "/user/" + params.username;
-    username = params.username;
-    loggedin = "Logged in as " + username;
+    loggedin = "Logged in as " + params.username;
   } catch {
     profilepath = "/user/" + "usernamewasundefined";
   }

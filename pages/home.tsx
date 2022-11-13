@@ -61,29 +61,30 @@ export default function home() {
         return (
             <>
                 <Mynav params={{username: userid}}/>
-                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center", padding: "1em"}}>
+                <Grid container spacing={0} style={{alignItems: "center", padding: "1em"}}>
                     <Grid item={true} xs={12}>
-                        <p>YOU ARE LOGGED IN AS {userid}</p>
-                        <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center", padding: "1em"}}>
-                            <h2>Your Teams:</h2>
+                        <p style={{justifyContent: "center", textAlign: "center"}}>YOU ARE LOGGED IN AS {userid}</p>
+                        <Grid container spacing={0} style={{alignItems: "center", padding: "1em"}}>
+                            <h2 style={{padding: "1em"}}><Link href="/teams">Your Teams:</Link></h2>
                             <Grid item={true} xs={12}>
-                                {userTeams.map((team, key) => {
-                                    var random = Math.floor(Math.random() * gradients.length);
-                                    var getgradient = gradients[random][0];
-                                    return (
-                                        <>
-                                            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center", padding: "1em"}}>
-                                                <Grid item={true} xs={3}>
-                                                    <Card variant="outlined" style={{background: getgradient}}>
-                                                        <h3>{team}</h3>
+                                <Grid container spacing={0} style={{padding: "1em"}}>
+                                    {userTeams.map((team, key) => {
+                                        var random = Math.floor(Math.random() * gradients.length);
+                                        var getgradient = gradients[random][0];
+                                        var teamurl = "/teams/" + team;
+                                        return (
+                                            <>
+                                                <Grid item={true} xs={3} style={{padding: "1em"}}>
+                                                    <Card variant="outlined" style={{background: getgradient, padding: "1em"}}>
+                                                        <h3 style={{padding: "1em", color: "white"}}>{team}</h3>
                                                         <br />
-                                                        <Button href='/teams/'>View Team</Button>
+                                                        <Button style={{padding: "1em"}} href={teamurl} variant='contained'>View Team</Button>
                                                     </Card>
                                                 </Grid>
-                                            </Grid>
-                                        </>
-                                    )
-                                })}
+                                            </>
+                                        )
+                                    })}
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
