@@ -201,7 +201,7 @@ export default function IssueCreate() {
                         <LoadingButton loading={CheckTeamIDIsLoading} variant="contained" onClick={CreateIssue} style={{margin: "1em", padding: "1em"}}>Create Issue</LoadingButton>
                     </Grid>
                 </Grid>
-                <Footer />
+                <Footer params={{username: username}} />
             </>
         )
     } else if (isAuth == false){

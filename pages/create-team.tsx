@@ -176,7 +176,7 @@ export default function TeamCreate() {
                     )}
                     </Grid>
                 </Grid>
-                <Footer />
+                <Footer params={{username: username}}/>
             </>
         )
     } else if (isAuth == false){

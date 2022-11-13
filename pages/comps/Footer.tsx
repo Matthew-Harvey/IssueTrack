@@ -3,16 +3,21 @@ import WebIcon from '@mui/icons-material/Web';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import EmailIcon from '@mui/icons-material/Email';
+import HomeIcon from '@mui/icons-material/Home';
 import Link from 'next/link';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import GroupsIcon from '@mui/icons-material/Groups';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 
-export default function Footer() {
+export default function Footer({params}) {
+    const profilepath = "/user/" + params.username;
     return (
         <>
             <footer style={{backgroundColor: "#1976d2", color: "white", flexShrink: 0, boxShadow: "0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)"}}>
                 <br />
                 <Grid container spacing={0} style={{justifyContent: "center", alignItems: "center", textAlign: "center"}}>
-                    <Grid item={true} xs={6} style={{justifyContent: "center", alignItems: "center", textAlign: "center"}}>
+                    <Grid item={true} xs={6}>
                         <p>Created by: Matthew Harvey</p>
                         <IconButton href='https://mharvey.netlify.app/'>
                             <WebIcon fontSize="large" style={{fill: "", color: "white"}} />
@@ -31,20 +36,18 @@ export default function Footer() {
                         </IconButton>
                     </Grid>
                     <Grid item={true} xs={6}>
-                        <Grid container spacing={0} style={{justifyContent: "center", alignItems: "center", textAlign: "center"}}>
-                            <Grid item={true} xs={2}>
-                                <p><Link href="/home">Home</Link></p>
-                            </Grid>
-                            <Grid item={true} xs={2}>
-                                <p><Link href="/teams">Teams</Link></p>
-                            </Grid>
-                            <Grid item={true} xs={2}>
-                                <p><Link href="/notifications">Notifications</Link></p>
-                            </Grid>
-                            <Grid item={true} xs={2}>
-                                <p><Link href="/Profile">Profile</Link></p>
-                            </Grid>
-                        </Grid>
+                        <IconButton href="/home">
+                            <HomeIcon fontSize="large" style={{fill: "", color: "white"}} />
+                        </IconButton>
+                        <IconButton href="/teams">
+                            <GroupsIcon fontSize="large" style={{fill: "", color: "white"}} />
+                        </IconButton>
+                        <IconButton href="/notifications">
+                            <NotificationsIcon fontSize="large" style={{fill: "", color: "white"}} />
+                        </IconButton>
+                        <IconButton href={profilepath} >
+                            <AccountCircle fontSize="large" style={{fill: "", color: "white"}} />
+                        </IconButton>
                     </Grid>
                 </Grid>
                 <br />

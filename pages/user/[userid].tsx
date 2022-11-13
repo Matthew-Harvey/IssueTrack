@@ -213,7 +213,7 @@ export default function UserProfile() {
               }
             </Grid>
           </Grid>
-          <Footer />
+          <Footer params={{username: userid}} />
       </>
     )
   } else if (isFound == false) {
