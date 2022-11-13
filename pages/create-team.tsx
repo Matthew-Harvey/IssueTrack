@@ -116,7 +116,7 @@ export default function TeamCreate() {
                     overview: team_overview,
                 }
             })
-            router.push({pathname: '/home', query: { username: username}}, '/home', { shallow: true });
+            router.push({pathname: '/home', query: { username: username }});
         } else {
             setTeamIsUniqueID(true);
         }
@@ -133,7 +133,9 @@ export default function TeamCreate() {
     if (isAuth == true) {
         return (
             <>
-                <Mynav params={{username: username}}/>
+                <div style={{position: "sticky"}}>
+                    <Mynav params={{username: username}}/>
+                </div>
                 <Box m="auto" display="flex" alignItems="center" justifyContent="center" style={{paddingTop: "2em"}}>
                     <h2>Create a new team</h2>
                 </Box>
@@ -141,35 +143,35 @@ export default function TeamCreate() {
                     <TextField style={{padding: "1em"}} fullWidth id="teamusername" label="Team ID" variant="filled" value={team_username} onChange={(e) => TeamUsernameChange(e.target.value)} />
                     <TextField style={{padding: "1em"}} fullWidth id="teamname" label="Team Name" variant="filled" value={team_name} onChange={(e) => TeamNameChange(e.target.value)} />
                     <TextField style={{padding: "1em"}} fullWidth placeholder="Team overview" multiline rows={2} maxRows={4} value={team_overview} onChange={(e) => TeamOverviewChange(e.target.value)}/>
-                    <Grid item={true} xs={6}>
+                    <Grid item={true} xs={12} sm={8} md={7} lg={6}>
                         <TextField style={{padding: "1em"}} fullWidth id="teammember" label="Add Member with Username" variant="filled" value={team_member} onChange={(e) => TeamMemberChange(e.target.value)} />
                     </Grid>
-                    <Grid item={true} xs={6}>
+                    <Grid item={true} xs={12} sm={4} md={5} lg={6}>
                         <LoadingButton loading={CreateMemberLoading} variant="contained" onClick={addmember} style={{margin: "1em", padding: "1em"}}>Add Member</LoadingButton>
                         <LoadingButton loading={ResetMemberLoading} variant="contained" onClick={resetmember} style={{margin: "1em", padding: "1em"}}>Reset Members</LoadingButton>
                     </Grid>
-                    <Grid item={true} xs={8} alignItems="center" justifyContent="center">
+                    <Grid item={true} xs={12} sm={6} md={5} lg={5} alignItems="center" justifyContent="center">
                         <p style={{padding: "1em"}}><h5>Added Members: </h5> {addedmembers}</p>
                     </Grid>
                     {isMemberSuccessBoolean == true && (
                         <>
-                            <Grid item={true} xs={7}>
+                            <Grid item={true} xs={12} sm={6} md={7} lg={7}>
                                 <Alert style={{ padding: "1em" }} severity="success">{isMemberSuccessMessage}</Alert>
                             </Grid>
                         </>
                     )}
                     {isMemberErrorBoolean == true && (
                         <>
-                            <Grid item={true} xs={7}>
+                            <Grid item={true} xs={12} sm={6} md={7} lg={7}>
                                 <Alert style={{padding: "1em"}} severity="error">{isMemberErrorMessage}</Alert>
                             </Grid>
                         </>
                     )}
-                    <Grid item={true} xs={12} style={{justifyContent: "center", textAlign: "left"}}>
+                    <Grid item={true} xs={12} sm={5} md={4} lg={3} style={{justifyContent: "center", textAlign: "left"}}>
                         <LoadingButton loading={CreateTeamIsLoading} variant="contained" onClick={CreateTeam} style={{margin: "1em", paddingTop: "3em", padding: "1em"}}>Create Team</LoadingButton>
                         {CreateTeamIsUniqueID == true && (
                         <>
-                            <Grid item={true} xs={7}>
+                            <Grid item={true} xs={12} sm={7} md={8} lg={9}>
                                 <Alert style={{padding: "1em"}} severity="error">Team ID is already in use</Alert>
                             </Grid>
                         </>

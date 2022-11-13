@@ -8,6 +8,9 @@ import React from "react";
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import Lottie from "lottie-react";
+import RegisterAnimation from "../public/Register.json";
+import NightTimeAnimation from "../public/nightbackground.json";
 
 export default function signIn() {
   const [isShown, setIsShown] = useState(false);
@@ -74,7 +77,7 @@ export default function signIn() {
     })
     if (getValid.data.isAdded == true) {
       Cookies.set('login_info', registerUsername.toLowerCase() + "," + getValid.data.id, { secure: true })
-      router.push({pathname: '/home', query: { username: registerUsername.toLowerCase(), pass: registerPassword}}, '/home', { shallow: true });
+      router.push({pathname: '/home', query: { username: registerUsername.toLowerCase(), pass: registerPassword}});
     } else {
       document.getElementById("err").innerText = getValid.data.error;
       setRegisterLoading(false);
@@ -92,22 +95,25 @@ export default function signIn() {
     <>
       <Container id="main" className="App">
         {!isShown && (
-          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
-            <Grid item={true} xs={10}>
-              <Card variant="outlined" style={{padding: "3em", paddingTop: "0em"}}>
-                <h1 style={{marginTop: "1em"}}>IssueTrack</h1>
-                <BugReportOutlinedIcon fontSize='large'/>
-                <h3 style={{marginTop: "1em"}}><u>Login</u></h3>
-                <TextField style={{margin: "1em"}} required id="username" label="Username" value={loginUsername} onChange={handleloginUsername} />
-                <br />
-                <TextField type="password" style={{margin: "1em"}} required id="password" label="Password" value={loginPassword} onChange={handleloginPassword} />
-                <br />
-                <LoadingButton loading={loginLoading} style={{margin: "1em"}} type="submit" variant="contained" color="primary" size="large" onClick={function(e) { setLoginLoading(true); handleLogin(e)}}>submit</LoadingButton>
-                <br />
-                <p id="err"></p>
-                <Button style={{margin: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={changestate}>Register</Button>
-                <LoadingButton loading={demoisLoading} style={{margin: "1em", backgroundColor: "grey"}} variant="contained" size="large" id="demologin" onClick={function(e) { setDemoLoading(true); Demo(e)}}>Demo Login</LoadingButton>
-              </Card>
+          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", border: "1px"}}>
+            <Grid item={true} xs={12} sm={7} md={6} lg={6}>
+                <Card variant="outlined" style={{padding: "3em", paddingTop: "0em"}}>
+                  <h1 style={{marginTop: "1em"}}>IssueTrack</h1>
+                  <BugReportOutlinedIcon fontSize='large'/>
+                  <h3 style={{marginTop: "1em"}}><u>Login</u></h3>
+                  <TextField style={{margin: "1em"}} required id="username" label="Username" value={loginUsername} onChange={handleloginUsername} />
+                  <br />
+                  <TextField type="password" style={{margin: "1em"}} required id="password" label="Password" value={loginPassword} onChange={handleloginPassword} />
+                  <br />
+                  <LoadingButton loading={loginLoading} style={{margin: "1em"}} type="submit" variant="contained" color="primary" size="large" onClick={function(e) { setLoginLoading(true); handleLogin(e)}}>submit</LoadingButton>
+                  <br />
+                  <p id="err"></p>
+                  <Button style={{margin: "1em", backgroundColor: "grey"}} variant="contained" size="large" onClick={changestate}>Register</Button>
+                  <LoadingButton loading={demoisLoading} style={{margin: "1em", backgroundColor: "grey"}} variant="contained" size="large" id="demologin" onClick={function(e) { setDemoLoading(true); Demo(e)}}>Demo Login</LoadingButton>
+                </Card>
+            </Grid>
+            <Grid item={true} xs={12} sm={5} md={6} lg={6}>
+              <Lottie animationData={RegisterAnimation} />
             </Grid>
           </Grid>
         )}

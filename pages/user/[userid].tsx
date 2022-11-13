@@ -160,7 +160,9 @@ export default function UserProfile() {
   if (isFound == true) {
     return (
       <>
-          <Mynav params={{username: userid}} />
+          <div style={{position: "sticky"}}>
+            <Mynav params={{username: userid}} />
+          </div>
           <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
             <Grid item={true} xs={12}>
               {isAuth == true &&

@@ -14,9 +14,9 @@ export default function Footer({params}) {
     var profilepath = "";
     try {
         profilepath = "/user/" + params.username;
-      } catch {
+    } catch (e) {
         profilepath = "/user/" + "usernamewasundefined";
-      }
+    }
     return (
         <>
             <footer style={{backgroundColor: "#1976d2", color: "white", flexShrink: 0, boxShadow: "0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)"}}>

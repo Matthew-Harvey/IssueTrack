@@ -79,7 +79,9 @@ export default function Ticket() {
     if (isAuth == true && canView == true) {
       return (
         <>
-            <Mynav params={{username: userid}}/>
+            <div style={{position: "sticky"}}>
+              <Mynav params={{username: userid}} />
+            </div>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", padding: "1em"}}>
               <Grid item={true} xs={12}>
                 <h2>{IssueObj.issueName}</h2>
