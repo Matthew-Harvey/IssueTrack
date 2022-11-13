@@ -4,6 +4,7 @@ import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 import Mynav from "../comps/Mynav";
 import { useRouter } from "next/router";
+import Footer from "../comps/Footer";
 
 export default function Ticket() {
     const router = useRouter();
@@ -79,26 +80,30 @@ export default function Ticket() {
       return (
         <>
             <Mynav params={{username: userid}}/>
-            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", padding: "1em"}}>
               <Grid item={true} xs={12}>
                 <h2>{IssueObj.issueName}</h2>
-                <h4>{IssueObj.issueSummary}</h4>
-                <p>{IssueObj.issuePriority}</p>
-                <p>{IssueObj.issueStatus}</p>
-                <p>{IssueObj.issueTimeRequirement}</p>
-                <p>{IssueObj.deadlinedate}</p>
-                <p>{IssueObj.lastupdated}</p>
-                <p>{IssueObj.lastupdated_date}</p>
+                <p>Created by {IssueObj.lastupdated} at {IssueObj.lastupdated_date}</p>
+                <h4>Summary: {IssueObj.issueSummary}</h4>
+                <p>Priority: {IssueObj.issuePriority}</p>
+                <p>Status: {IssueObj.issueStatus}</p>
+                <p>Estimated Time: {IssueObj.issueTimeRequirement}</p>
+                <p>Deadline: {IssueObj.deadlinedate}</p>
+              </Grid>
+              <br />
+              <Grid item={true} xs={12}>
+                <h3>History</h3>
               </Grid>
             </Grid>
+            <Footer />
         </>
       )
     } else if (isAuth == false || canView == false) {
       return (
         <>
-            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
               <Grid item={true} xs={12}>
-                <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
                   <p>You are not authorised to view this issue or it does not exist.</p>
                 </Box>
               </Grid>

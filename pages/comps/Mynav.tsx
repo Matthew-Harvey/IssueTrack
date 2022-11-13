@@ -167,8 +167,8 @@ export default function PrimarySearchAppBar({params}) {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box position="sticky" style={{position: "sticky"}} sx={{ flexGrow: 1 }}>
+      <AppBar position="sticky" style={{position: "sticky"}}>
         <Toolbar>
           <Link style={{color: "#FFFFFF"}} href="/home">
             <Typography

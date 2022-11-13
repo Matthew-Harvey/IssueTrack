@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Box, Button, CircularProgress, Grid, InputLabel, Link, MenuItem, Select, Stack, Switch, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
+import Footer from './comps/Footer';
 
 
 export default function IssueCreate() {
@@ -200,6 +201,7 @@ export default function IssueCreate() {
                         <LoadingButton loading={CheckTeamIDIsLoading} variant="contained" onClick={CreateIssue} style={{margin: "1em", padding: "1em"}}>Create Issue</LoadingButton>
                     </Grid>
                 </Grid>
+                <Footer />
             </>
         )
     } else if (isAuth == false){
@@ -207,12 +209,12 @@ export default function IssueCreate() {
             <>
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
                     <Grid item={true} xs={12}>
-                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                        <p>You must login in order to create an issue.</p>
-                    </Box>
-                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                        <Button><Link href='/'>Login/Register</Link></Button>
-                    </Box>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                            <p>You must login in order to create an issue.</p>
+                        </Box>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                            <Button><Link href='/'>Login/Register</Link></Button>
+                        </Box>
                     </Grid>
                 </Grid>
             </>
@@ -222,9 +224,9 @@ export default function IssueCreate() {
             <>
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
                     <Grid item={true} xs={12}>
-                    <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-                        <CircularProgress />
-                    </Box>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                            <CircularProgress />
+                        </Box>
                     </Grid>
                 </Grid>
             </>

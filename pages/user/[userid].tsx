@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import Mynav from '../comps/Mynav';
 import { Pie, Line } from 'react-chartjs-2';
 import 'chart.js/auto';
+import Footer from '../comps/Footer';
 
 function a11yProps(index: number) {
   return {
@@ -212,14 +213,15 @@ export default function UserProfile() {
               }
             </Grid>
           </Grid>
+          <Footer />
       </>
     )
   } else if (isFound == false) {
     return (
       <>
-          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
             <Grid item={true} xs={12}>
-              <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+              <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
                 <p>USER DOES NOT EXIST</p>
               </Box>
             </Grid>

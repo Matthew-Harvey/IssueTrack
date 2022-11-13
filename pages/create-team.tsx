@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Box, Button, CircularProgress, Grid, Link, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
+import Footer from './comps/Footer';
 
 export default function TeamCreate() {
     const [isAuth, setAuth] = useState(null);
@@ -175,19 +176,20 @@ export default function TeamCreate() {
                     )}
                     </Grid>
                 </Grid>
+                <Footer />
             </>
         )
     } else if (isAuth == false){
         return (
             <>
-                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
                     <Grid item={true} xs={12}>
-                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                        <p>You must login in order to create a new team.</p>
-                    </Box>
-                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                        <Button><Link href='/'>Login/Register</Link></Button>
-                    </Box>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                            <p>You must login in order to create a new team.</p>
+                        </Box>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                            <Button><Link href='/'>Login/Register</Link></Button>
+                        </Box>
                     </Grid>
                 </Grid>
             </>
@@ -197,9 +199,9 @@ export default function TeamCreate() {
             <>
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
                     <Grid item={true} xs={12}>
-                    <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-                        <CircularProgress />
-                    </Box>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                            <CircularProgress />
+                        </Box>
                     </Grid>
                 </Grid>
             </>

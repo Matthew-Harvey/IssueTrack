@@ -3,6 +3,7 @@ import { getCookie } from 'cookies-next';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, Grid, Link } from '@mui/material';
+import Footer from './comps/Footer';
 
 export default function home() {
     const [isAuth, setAuth] = useState(null);
@@ -32,22 +33,23 @@ export default function home() {
         return (
             <>
                 <Mynav params={{username: userid}}/>
-                <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
                     <p>YOU ARE LOGGED IN AS {userid}</p>
                 </Box>
+                <Footer />
             </>
         )
     } else if (isAuth == false){
         return (
             <>
-                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
+                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
                     <Grid item={true} xs={12}>
-                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                        <p>YOU ARE NOT LOGGED IN.</p>
-                    </Box>
-                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                        <Button><Link href='/'>Login/Register</Link></Button>
-                    </Box>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                            <p>YOU ARE NOT LOGGED IN.</p>
+                        </Box>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                            <Button><Link href='/'>Login/Register</Link></Button>
+                        </Box>
                     </Grid>
                 </Grid>
             </>
@@ -57,9 +59,9 @@ export default function home() {
             <>
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
                     <Grid item={true} xs={12}>
-                    <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-                        <CircularProgress />
-                    </Box>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                            <CircularProgress />
+                        </Box>
                     </Grid>
                 </Grid>
             </>
