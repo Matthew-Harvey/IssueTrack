@@ -141,35 +141,44 @@ export default function IssueCreate() {
                     <h2>Create a new issue</h2>
                 </Box>
                 <Grid container spacing={0} style={{padding: "2em"}}>
-                    <Grid item={true} xs={12} sm={10} md={9} lg={8}>
-                        <TextField style={{padding: "1em"}} id="issueName" label="Name" placeholder="Issue Name" variant="standard" value={issueName} onChange={(e) => issueNameChange(e.target.value)} />
-                    </Grid>
-                    <Grid item={true} xs={6} sm={6} md={5} lg={4}>
-                        <InputLabel style={{padding: "1em"}} id="issuePriority">Issue Priority</InputLabel>
-                        <Select style={{margin: "1em"}} labelId="Issue Priority" id="issuePriority" value={issuePriority} label="Issue Priority" onChange={(e) => issuePriorityChange(e.target.value)}>
-                            <MenuItem value="Urgent">Urgent</MenuItem>
-                            <MenuItem value="High">High</MenuItem>
-                            <MenuItem value="Medium">Medium</MenuItem>
-                            <MenuItem value="Low">Low</MenuItem>
-                        </Select>
-                    </Grid>
-                    <Grid item={true} xs={6} sm={6} md={5} lg={4}>
-                        <InputLabel style={{padding: "1em"}} id="issueStatus">Issue Status</InputLabel>
-                        <Select style={{margin: "1em"}} labelId="Issue Status" id="issueStatus" value={issueStatus} label="Issue Status" onChange={(e) => issueStatusChange(e.target.value)}>
-                            <MenuItem value="Backlog">Backlog</MenuItem>
-                            <MenuItem value="WIP">WIP</MenuItem>
-                            <MenuItem value="Blocked">Blocked</MenuItem>
-                            <MenuItem value="Complete">Complete</MenuItem>
-                            <MenuItem value="Closed">Closed</MenuItem>
-                        </Select>
-                    </Grid>
                     <Grid item={true} xs={12} sm={12} md={12} lg={12}>
-                        <TextField style={{padding: "1em"}} variant="standard" fullWidth label="Summary" placeholder="Issue Summary" multiline rows={4} value={issueSummary} onChange={(e) => issueSummaryChange(e.target.value)}/>
+                        <TextField style={{padding: "1em"}} id="issueName" fullWidth label="Name" placeholder="Issue Name" variant="standard" value={issueName} onChange={(e) => issueNameChange(e.target.value)} />
                     </Grid>
-                    <Grid item={true} xs={6} sm={4} md={4} lg={4}>
-                        <TextField type={"number"} style={{padding: "1em"}} id="issueTimeRequirement" label="Estimated Time" placeholder="Estimated Time Required" variant="standard" value={issueTimeRequirement} onChange={(e) => issueTimeRequirementChange(e.target.value)} />
+                    <Grid item={true} xs={12} sm={6} md={6} lg={6}>
+                        <Grid container spacing={0}>
+                            <Grid item={true} xs={6} sm={6} md={6} lg={6}>
+                                <InputLabel style={{padding: "1em"}} id="issuePriority">Issue Priority</InputLabel>
+                            </Grid>
+                            <Grid item={true} xs={6} sm={6} md={6} lg={6}>
+                                <Select style={{margin: "1em"}} labelId="Issue Priority" id="issuePriority" value={issuePriority} label="Issue Priority" onChange={(e) => issuePriorityChange(e.target.value)}>
+                                    <MenuItem value="Urgent">Urgent</MenuItem>
+                                    <MenuItem value="High">High</MenuItem>
+                                    <MenuItem value="Medium">Medium</MenuItem>
+                                    <MenuItem value="Low">Low</MenuItem>
+                                </Select>
+                            </Grid>
+                        </Grid>
                     </Grid>
-                    <Grid item={true} xs={6} sm={4} md={4} lg={4}>
+                    <Grid item={true} xs={12} sm={6} md={6} lg={6}>
+                        <Grid container spacing={0}>
+                            <Grid item={true} xs={6} sm={6} md={6} lg={6}>
+                                <InputLabel style={{padding: "1em"}} id="issueStatus">Issue Status</InputLabel>
+                            </Grid>
+                            <Grid item={true} xs={6} sm={6} md={6} lg={6}>
+                                <Select style={{margin: "1em"}} labelId="Issue Status" id="issueStatus" value={issueStatus} label="Issue Status" onChange={(e) => issueStatusChange(e.target.value)}>
+                                    <MenuItem value="Backlog">Backlog</MenuItem>
+                                    <MenuItem value="WIP">WIP</MenuItem>
+                                    <MenuItem value="Blocked">Blocked</MenuItem>
+                                    <MenuItem value="Complete">Complete</MenuItem>
+                                    <MenuItem value="Closed">Closed</MenuItem>
+                                </Select>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item={true} xs={6} sm={6} md={6} lg={6}>
+                        <TextField type={"number"} style={{padding: "1em"}} fullWidth id="issueTimeRequirement" label="Estimated Time" placeholder="Estimated Time Required" variant="standard" value={issueTimeRequirement} onChange={(e) => issueTimeRequirementChange(e.target.value)} />
+                    </Grid>
+                    <Grid item={true} xs={6} sm={6} md={6} lg={6}>
                         <Stack style={{padding: "1em"}} direction="row" spacing={1} alignItems="center">
                             <TextField
                                 id="date"
@@ -183,7 +192,10 @@ export default function IssueCreate() {
                             />
                         </Stack>
                     </Grid>
-                    <Grid item={true} xs={6} sm={4} md={4} lg={4}>
+                    <Grid item={true} xs={12} sm={12} md={12} lg={12}>
+                        <TextField style={{padding: "1em"}} variant="standard" fullWidth label="Summary" placeholder="Issue Summary" multiline rows={4} value={issueSummary} onChange={(e) => issueSummaryChange(e.target.value)}/>
+                    </Grid>
+                    <Grid item={true} xs={12} sm={5} md={5} lg={5}>
                         <Stack style={{padding: "1em"}} direction="row" spacing={1} alignItems="center">
                             <Typography>Assign to team</Typography>
                             <Switch defaultChecked inputProps={{ 'aria-label': 'Assign Issue' }} value={assignval} onChange={() => {setAssignVal(!assignval);}} />
@@ -192,28 +204,26 @@ export default function IssueCreate() {
                     </Grid>
                     {assignval == true && (
                         <>
-                            <Grid item={true} xs={1}>
-                            </Grid>
-                            <Grid item={true} xs={6}>
+                            <Grid item={true} xs={12} sm={7} md={7} lg={7}>
                                 <TextField style={{padding: "1em"}} fullWidth id="issueAssignTeam" label="Team Username" placeholder="Team Username" variant="standard" value={teamusername} onChange={(e) => teamusernameChange(e.target.value)} />
                             </Grid>
                             {CheckTeamIDIsUnique == "true" && (
                                 <>
-                                    <Grid item={true} xs={7}>
+                                    <Grid item={true} xs={12} sm={5} md={5} lg={5}>
                                         <Alert style={{ padding: "1em" }} severity="success">Found team.</Alert>
                                     </Grid>
                                 </>
                             )}
                             {CheckTeamIDIsUnique == "false" && (
                                 <>
-                                    <Grid item={true} xs={7}>
+                                    <Grid item={true} xs={12} sm={5} md={5} lg={5}>
                                         <Alert style={{padding: "1em"}} severity="error">Team does not exist.</Alert>
                                     </Grid>
                                 </>
                             )}
                         </>
                     )}
-                    <Grid item={true} xs={3}>
+                    <Grid item={true} xs={12} sm={12} md={12} lg={12}>
                         <LoadingButton loading={CheckTeamIDIsLoading} variant="contained" onClick={CreateIssue} style={{margin: "1em", padding: "1em"}}>Create Issue</LoadingButton>
                     </Grid>
                 </Grid>

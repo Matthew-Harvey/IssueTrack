@@ -146,9 +146,15 @@ export default function TeamCreate() {
                     <Grid item={true} xs={12} sm={8} md={7} lg={6}>
                         <TextField style={{padding: "1em"}} fullWidth id="teammember" label="Add Member with Username" variant="filled" value={team_member} onChange={(e) => TeamMemberChange(e.target.value)} />
                     </Grid>
-                    <Grid item={true} xs={12} sm={4} md={5} lg={6}>
-                        <LoadingButton loading={CreateMemberLoading} variant="contained" onClick={addmember} style={{margin: "1em", padding: "1em"}}>Add Member</LoadingButton>
-                        <LoadingButton loading={ResetMemberLoading} variant="contained" onClick={resetmember} style={{margin: "1em", padding: "1em"}}>Reset Members</LoadingButton>
+                    <Grid item={true} xs={12} sm={6} md={6} lg={6}>
+                        <Grid container spacing={0}>
+                            <Grid item={true} xs={6} sm={4} md={3} lg={2}>
+                                <LoadingButton loading={CreateMemberLoading} variant="contained" color='success' onClick={addmember} style={{margin: "1em", padding: "1em"}}>Add</LoadingButton>
+                            </Grid>
+                            <Grid item={true} xs={6} sm={4} md={3} lg={2}>
+                                <LoadingButton loading={ResetMemberLoading} variant="contained" color='error' onClick={resetmember} style={{margin: "1em", padding: "1em"}}>Reset</LoadingButton> 
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item={true} xs={12} sm={6} md={5} lg={5} alignItems="center" justifyContent="center">
                         <p style={{padding: "1em"}}><h5>Added Members: </h5> {addedmembers}</p>
