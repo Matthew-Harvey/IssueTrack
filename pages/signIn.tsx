@@ -10,7 +10,6 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import Lottie from "lottie-react";
 import RegisterAnimation from "../public/Register.json";
-import NightTimeAnimation from "../public/nightbackground.json";
 
 export default function signIn() {
   const [isShown, setIsShown] = useState(false);
