@@ -64,7 +64,7 @@ export default function home() {
     if (isAuth == true) {
         return (
             <>
-                <div style={{position: "sticky"}}>
+                <div style={{position: "sticky", top: 0}}>
                     <Mynav params={{username: userid}}/>
                 </div>
                 <Grid container spacing={0} style={{alignItems: "center", padding: "1em"}}>
