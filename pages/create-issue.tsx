@@ -134,7 +134,7 @@ export default function IssueCreate() {
     if (isAuth == true) {
         return (
             <>
-                <div style={{position: "sticky", top: 0}}>
+                <div style={{position: "sticky", top: 0, zIndex: 100}}>
                     <Mynav params={{username: username}}/>
                 </div>
                 <Box m="auto" display="flex" alignItems="center" justifyContent="center" style={{paddingTop: "2em"}}>

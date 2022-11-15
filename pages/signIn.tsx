@@ -117,8 +117,8 @@ export default function signIn() {
           </Grid>
         )}
         {isShown && (
-          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
-            <Grid item={true} xs={10}>
+          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", border: "1px"}}>
+            <Grid item={true} xs={12} sm={7} md={6} lg={6}>
               <Card variant="outlined" style={{padding: "3em", paddingTop: "0em"}}>
                 <h1 style={{marginTop: "1em"}}>IssueTrack</h1>
                 <BugReportOutlinedIcon fontSize='large'/>
@@ -135,6 +135,9 @@ export default function signIn() {
                 <LoadingButton loading={registerLoading} style={{margin: "1em"}} type="submit" variant="contained" color="primary" size="large" id="submitlogin" onClick={function(e) { setRegisterLoading(true); handleRegister(e)}}>submit</LoadingButton>
                 <p id="err"></p>
               </Card>
+            </Grid>
+            <Grid item={true} xs={12} sm={5} md={6} lg={6}>
+              <Lottie animationData={RegisterAnimation} />
             </Grid>
           </Grid>
         )}

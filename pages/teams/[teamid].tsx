@@ -79,7 +79,7 @@ export default function Ticket() {
     if (isAuth == true && canView == true) {
       return (
         <>
-            <div style={{position: "sticky", top: 0}}>
+            <div style={{position: "sticky", top: 0, zIndex: 100}}>
               <Mynav params={{username: userid}} />
             </div>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", padding: "1em"}}>

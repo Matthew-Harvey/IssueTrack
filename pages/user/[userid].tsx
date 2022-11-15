@@ -160,7 +160,7 @@ export default function UserProfile() {
   if (isFound == true) {
     return (
       <>
-          <div style={{position: "sticky", top: 0}}>
+          <div style={{position: "sticky", top: 0, zIndex: 100}}>
             <Mynav params={{username: userid}} />
           </div>
           <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
