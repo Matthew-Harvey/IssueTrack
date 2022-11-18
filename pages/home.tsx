@@ -90,7 +90,7 @@ export default function home() {
                                 Modelled using Microsoft Planner and Github issues; the aim is to create a comprehensive platform that covers gaps in the existing systems.
                                 Click below to start a new issue/team and begin tracking your goals...
                             </p>
-                            <Button style={{padding: "1em", margin: "1em"}} href="/issues" variant='contained'>View My Issues</Button>
+                            <Button style={{padding: "1em", margin: "1em"}} href="/myissues" variant='contained'>View My Issues</Button>
                             <Button style={{padding: "1em", margin: "1em"}} href="/create-issue" variant='contained'>Create new issue</Button>
                             <Button style={{padding: "1em", margin: "1em"}} href="/create-team" variant='contained'>Create new team</Button>
                         </Card>
