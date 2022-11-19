@@ -16,6 +16,9 @@ export default function Ticket() {
     const [IssueObj, setIssueObj] = useState(Object());
 
     useEffect( () => {
+      if(!issueid) {
+        return;
+      }
       const fetchAuth = async () => {
         if (getCookie('login_info') != undefined) {
             var strsplit = getCookie('login_info').toString().split(",");
@@ -25,6 +28,36 @@ export default function Ticket() {
             if (getAuth.data.isAuth == true) {
                 setAuth(getAuth.data.isAuth);
                 setUserId(username_cookie);
+                const getIssue = await axios.get("/api/issue/GetIssueInfo", {params: {issueID: issueid}});
+                if (getIssue.data.isFound == false) {
+                  setcanView(false);
+                } else {
+                  if (getIssue.data.teamusername != "") {
+                    // check team users
+                    const getUserTeams = await axios.get('/api/user/GetUserInfo?userid=' + userid);
+                    var userteams = getUserTeams.data.teams;
+                    userteams = userteams.toString().split(",");
+                    var doesmatch = false;
+                    for (var count in userteams) {
+                      if (userteams[count] == getIssue.data.teamusername) {
+                        doesmatch = true;
+                      }
+                    }
+                    if (doesmatch == true) {
+                      setcanView(true);
+                    } else {
+                      setcanView(false);
+                    }
+                  } else {
+                    // individual issue - check if auth user is same as issue created user.
+                    if (getIssue.data.username == userid) {
+                      setcanView(true);
+                    } else {
+                      setcanView(false);
+                    }
+                  }
+                  setIssueObj(getIssue.data);
+                }
             } else {
               setAuth(getAuth.data.isAuth);
           }
@@ -33,50 +66,7 @@ export default function Ticket() {
         }
       }
       fetchAuth();
-    }, [isAuth]);
-  
-    useEffect( () => {
-      if(!issueid) {
-        return;
-      }
-      // ADDITIONAL AUTH TO SEE IF PART OF TEAM THAT CAN VIEW TICKET OR INDIVIDUAL.
-      // Get info of issue with id passed
-      const getIssueInfo = async () => {
-        const getIssue = await axios.get("/api/issue/GetIssueInfo", {params: {issueID: issueid}});
-        if (getIssue.data.isFound == false) {
-          setcanView(false);
-        } else {
-          if (getIssue.data.assignval == true) {
-            // check team users
-            const getUserTeams = await axios.get('/api/user/GetUserInfo?userid=' + userid);
-            var userteams = getUserTeams.data.teams;
-            userteams = userteams.toString().split(",");
-            var doesmatch = false;
-            for (var team in userteams) {
-              if (team == getIssue.data.teamusername) {
-                doesmatch = true;
-              }
-            }
-            console.log(userteams, doesmatch);
-            if (doesmatch == true) {
-              setcanView(true);
-            } else {
-              setcanView(false);
-            }
-          } else {
-            // individual issue - check if auth user is same as issue created user.
-            console.log(getIssue.data.username, userid);
-            if (getIssue.data.username != userid) {
-              setcanView(false);
-            } else {
-              setcanView(true);
-            }
-          }
-          setIssueObj(getIssue.data);
-        }
-      }
-      getIssueInfo();
-    }, [issueid, canView]);
+    }, [isAuth, issueid]);
   
     if (isAuth == true && canView == true) {
       return (
