@@ -1,19 +1,26 @@
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { Box, Button, Card, CircularProgress, Grid } from "@mui/material";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 import Mynav from "../comps/Mynav";
-import { useRouter } from "next/router";
 import Footer from "../comps/Footer";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-export default function Ticket() {
+export default function TeamIssues() {
+
     const router = useRouter();
-    const { issueid } = router.query;
+    const { teamid } = router.query;
 
     const [isAuth, setAuth] = useState(null);
     const [userid, setUserId] = useState("");
-    const [canView, setcanView] = useState(null);
-    const [IssueObj, setIssueObj] = useState(Object());
+    const [BacklogIssues, setBacklogIssues] = useState(Array());
+    const [WIPIssues, setWIPIssues] = useState(Array());
+    const [BlockedIssues, setBlockedIssues] = useState(Array());
+    const [ClosedIssues, setClosedIssues] = useState(Array());
+    const [CompleteIssues, setCompleteIssues] = useState(Array());
+
+    const basic_issue_url = "/issue/";
 
     useEffect( () => {
       const fetchAuth = async () => {
@@ -25,6 +32,35 @@ export default function Ticket() {
             if (getAuth.data.isAuth == true) {
                 setAuth(getAuth.data.isAuth);
                 setUserId(username_cookie);
+                const getMyIssues = await axios.get("/api/issue/GetTeamIssues", {params: {teamid: teamid}});
+                const issueid = (getMyIssues.data.issueID).split(",");
+                const isFound = (getMyIssues.data.isFound).split(",");
+                const issueName = (getMyIssues.data.issueName).split(",");
+                const issueSummary = (getMyIssues.data.issueSummary).split(",");
+                const issuePriority = (getMyIssues.data.issuePriority).split(",");
+                const issueStatus = (getMyIssues.data.issueStatus).split(",");
+                const issueTimeRequirement = (getMyIssues.data.issueTimeRequirement).split(",");
+                const deadlinedate = (getMyIssues.data.deadlinedate).split(",");
+                const lastupdated_date = (getMyIssues.data.lastupdated_date).split(",");
+                var count = 0;
+                for (var issueID in issueid) {
+                    const arr = [issueid[count], isFound[count], issueName[count], issueSummary[count],
+                        issuePriority[count], issueStatus[count], issueTimeRequirement[count],
+                        deadlinedate[count], lastupdated_date[count]];
+                    if (issueStatus[count] == "WIP") {
+                      setWIPIssues(WIPIssues => [...WIPIssues, arr]);
+                    } else if (issueStatus[count] == "Blocked") {
+                      setBlockedIssues(BlockedIssues => [...BlockedIssues, arr]);
+                    } else if (issueStatus[count] == "Closed") {
+                      setClosedIssues(ClosedIssues => [...ClosedIssues, arr]);
+                    } else if (issueStatus[count] == "Complete") {
+                      setCompleteIssues(CompleteIssues => [...CompleteIssues, arr]);
+                    } else if (issueStatus[count] == "Backlog") {
+                      setBacklogIssues(BacklogIssues => [...BacklogIssues, arr]);
+                    }
+                    count++;
+                };
+
             } else {
               setAuth(getAuth.data.isAuth);
           }
@@ -34,73 +70,98 @@ export default function Ticket() {
       }
       fetchAuth();
     }, [isAuth]);
-  
-    useEffect( () => {
-      if(!issueid) {
-        return;
-      }
-      // ADDITIONAL AUTH TO SEE IF PART OF TEAM THAT CAN VIEW TICKET OR INDIVIDUAL.
-      // Get info of issue with id passed
-      const getIssueInfo = async () => {
-        const getIssue = await axios.get("/api/issue/GetIssueInfo", {params: {issueID: issueid}});
-        if (getIssue.data.isFound == false) {
-          setcanView(false);
-        } else {
-          if (getIssue.data.assignval == true) {
-            // check team users
-            const getUserTeams = await axios.get('/api/user/GetUserInfo?userid=' + userid);
-            var userteams = getUserTeams.data.teams;
-            userteams = userteams.toString().split();
-            var doesmatch = false;
-            for (var team in userteams) {
-              if (team == getIssue.data.teamusername) {
-                doesmatch = true;
-              }
-            }
-            if (doesmatch == true) {
-              setcanView(true);
-            } else {
-              setcanView(false);
-            }
-          } else {
-            // individual issue - check if auth user is same as issue created user.
-            if (getIssue.data.username != userid) {
-              setcanView(false);
-            } else {
-              setcanView(true);
-            }
-          }
-          setIssueObj(getIssue.data);
-        }
-      }
-      getIssueInfo();
-    }, [issueid, canView]);
-  
-    if (isAuth == true && canView == true) {
+
+    if (isAuth == true) {
       return (
         <>
             <div style={{position: "sticky", top: 0, zIndex: 100}}>
               <Mynav params={{username: userid}} />
             </div>
+            <h4 style={{padding: "2em"}}>Team Issues.</h4>
+            <Button style={{padding: "1em", margin: "1em"}} href="/create-teamissue" variant='contained'>Create Issue</Button>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", padding: "1em"}}>
-              <Grid item={true} xs={12}>
-                <h2>{IssueObj.issueName}</h2>
-                <p>Created by {IssueObj.lastupdated} at {IssueObj.lastupdated_date}</p>
-                <h4>Summary: {IssueObj.issueSummary}</h4>
-                <p>Priority: {IssueObj.issuePriority}</p>
-                <p>Status: {IssueObj.issueStatus}</p>
-                <p>Estimated Time: {IssueObj.issueTimeRequirement}</p>
-                <p>Deadline: {IssueObj.deadlinedate}</p>
+                <Grid item={true} xs={12} sm={6} md={4} lg={3}>
+                    <h3>Backlog</h3>
+                    {BacklogIssues.map((issue, _key) => {
+                        return (
+                            <>
+                                <Grid item={true} key={_key} xs={12} sm={12} md={12} lg={12} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
+                                    <Card variant="outlined" style={{padding: "1em"}}>
+                                        <h3 style={{color: "black", padding: "1em"}}>{issue[2]}</h3>
+                                        <Link href={basic_issue_url + issue[0]}>
+                                          <Button style={{margin: "1em"}} variant='contained'>View Issue</Button>
+                                        </Link>
+                                    </Card>
+                                </Grid>
+                            </>
+                        )
+                    })}
               </Grid>
-              <br />
-              <Grid item={true} xs={12}>
-                <h3>History</h3>
+              <Grid item={true} xs={12} sm={6} md={4} lg={3}>
+                    <h3>WIP</h3>
+                    {WIPIssues.map((issue, _key) => {
+                        return (
+                            <>
+                                <Grid item={true} key={_key} xs={12} sm={12} md={12} lg={12} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
+                                    <Card variant="outlined" style={{padding: "1em"}}>
+                                        <h3 style={{color: "black", padding: "1em"}}>{issue[2]}</h3>
+                                        <Link href={basic_issue_url + issue[0]}>View Issue</Link>
+                                    </Card>
+                                </Grid>
+                            </>
+                        )
+                    })}
+              </Grid>
+              <Grid item={true} xs={12} sm={6} md={4} lg={3}>
+                    <h3>Blocked</h3>
+                    {BlockedIssues.map((issue, _key) => {
+                        return (
+                            <>
+                                <Grid item={true} key={_key} xs={12} sm={12} md={12} lg={12} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
+                                    <Card variant="outlined" style={{padding: "1em"}}>
+                                        <h3 style={{color: "black", padding: "1em"}}>{issue[2]}</h3>
+                                        <Link href={basic_issue_url + issue[0]}>View Issue</Link>
+                                    </Card>
+                                </Grid>
+                            </>
+                        )
+                    })}
+              </Grid>
+              <Grid item={true} xs={12} sm={6} md={4} lg={3}>
+                    <h3>Closed</h3>
+                    {ClosedIssues.map((issue, _key) => {
+                        return (
+                            <>
+                                <Grid item={true} key={_key} xs={12} sm={12} md={12} lg={12} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
+                                    <Card variant="outlined" style={{padding: "1em"}}>
+                                        <h3 style={{color: "black", padding: "1em"}}>{issue[2]}</h3>
+                                        <Link href={basic_issue_url + issue[0]}>View Issue</Link>
+                                    </Card>
+                                </Grid>
+                            </>
+                        )
+                    })}
+              </Grid>
+              <Grid item={true} xs={12} sm={6} md={4} lg={3}>
+                    <h3>Complete</h3>
+                    {CompleteIssues.map((issue, _key) => {
+                        return (
+                            <>
+                                <Grid item={true} key={_key} xs={12} sm={12} md={12} lg={12} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
+                                    <Card variant="outlined" style={{padding: "1em"}}>
+                                        <h3 style={{color: "black", padding: "1em"}}>{issue[2]}</h3>
+                                        <Link href={basic_issue_url + issue[0]}>View Issue</Link>
+                                    </Card>
+                                </Grid>
+                            </>
+                        )
+                    })}
               </Grid>
             </Grid>
             <Footer params={{username: userid}} />
         </>
       )
-    } else if (isAuth == false || canView == false) {
+    } else if (isAuth == false) {
       return (
         <>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>

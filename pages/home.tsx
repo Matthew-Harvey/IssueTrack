@@ -1,8 +1,8 @@
 import Mynav from './comps/Mynav';
 import { getCookie } from 'cookies-next';
 import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
-import { Avatar, Box, Breadcrumbs, Button, Card, CircularProgress, Grid, Link } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Breadcrumbs, Button, Card, CircularProgress, Grid, Link } from '@mui/material';
 import Footer from './comps/Footer';
 import Lottie from "lottie-react";
 import WelcomeAnimation from "../public/Welcome.json";
@@ -63,7 +63,7 @@ export default function home() {
             }
         }
         fetchAuth();
-    }, [isAuth, userid]);
+    }, [isAuth]);
 
     const getRandom = () => {
         return Math.floor(Math.random() * gradients.length);
@@ -91,8 +91,7 @@ export default function home() {
                                 Click below to start a new issue/team and begin tracking your goals...
                             </p>
                             <Button style={{padding: "1em", margin: "1em"}} href="/myissues" variant='contained'>View My Issues</Button>
-                            <Button style={{padding: "1em", margin: "1em"}} href="/create-issue" variant='contained'>Create new issue</Button>
-                            <Button style={{padding: "1em", margin: "1em"}} href="/create-team" variant='contained'>Create new team</Button>
+                            <Button style={{padding: "1em", margin: "1em"}} href="/create-team" variant='contained'>Create team</Button>
                         </Card>
                     </Grid>
                             <Grid item={true} xs={12} sm={12} md={12} lg={12}>
@@ -108,7 +107,9 @@ export default function home() {
                                                 <Grid item={true} key={_key} xs={6} sm={6} md={4} lg={3} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
                                                     <Card variant="outlined" style={{background: getgradient, padding: "1em"}}>
                                                             <h3 style={{color: "white", padding: "1em"}}>{team}</h3>
-                                                            <Button style={{margin: "1em"}} href={teamurl} variant='contained'>View Team</Button>
+                                                            <Link href={teamurl}>
+                                                                <Button style={{margin: "1em"}} variant='contained'>View Team</Button>
+                                                            </Link>
                                                     </Card>
                                                 </Grid>
                                             </>

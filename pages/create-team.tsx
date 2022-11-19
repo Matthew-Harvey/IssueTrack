@@ -33,7 +33,7 @@ export default function TeamCreate() {
             setAddMember(username);
         }
         fetchAuth();
-    }, [isAuth, username]);
+    }, [isAuth]);
 
     const [team_username, setTeamUsername] = useState("");
     const TeamUsernameChange = (value) => {

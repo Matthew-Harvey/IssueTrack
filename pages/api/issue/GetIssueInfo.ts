@@ -16,10 +16,8 @@ export default async function GetIssueInfo(req: NextApiRequest, res: NextApiResp
     var issueStatus = "";
     var issueTimeRequirement = "";
     var deadlinedate = "";
-    var assignval = "";
     var teamusername = "";
     var username = "";
-    var lastupdated = "";
     var lastupdated_date = "";
 
     const q = query(issues_collection, where("issueID", "==", issueID));
@@ -34,15 +32,12 @@ export default async function GetIssueInfo(req: NextApiRequest, res: NextApiResp
         issueStatus = issuedata.issueStatus;
         issueTimeRequirement = issuedata.issueTimeRequirement;
         deadlinedate = issuedata.deadlinedate;
-        assignval = issuedata.assignval;
         teamusername = issuedata.teamusername;
         username = issuedata.username;
-        lastupdated = issuedata.lastupdated;
         lastupdated_date = issuedata.lastupdated_date
     });
 
     res.status(200).json({isFound: isFound, issueID: issueID, issueName: issueName, issueSummary: issueSummary, issuePriority: issuePriority, issueStatus: issueStatus, 
-        issueTimeRequirement: issueTimeRequirement, deadlinedate: deadlinedate, assignval: assignval, teamusername: teamusername, username: username, lastupdated: lastupdated,
-        lastupdated_date: lastupdated_date,
+        issueTimeRequirement: issueTimeRequirement, deadlinedate: deadlinedate, teamusername: teamusername, username: username, lastupdated_date: lastupdated_date,
     });
 }

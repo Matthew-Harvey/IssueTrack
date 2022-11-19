@@ -4,6 +4,7 @@ import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 import Mynav from "./comps/Mynav";
 import Footer from "./comps/Footer";
+import Link from "next/link";
 
 export default function MyIssues() {
     const [isAuth, setAuth] = useState(null);
@@ -13,6 +14,8 @@ export default function MyIssues() {
     const [BlockedIssues, setBlockedIssues] = useState(Array());
     const [ClosedIssues, setClosedIssues] = useState(Array());
     const [CompleteIssues, setCompleteIssues] = useState(Array());
+
+    const basic_issue_url = "/issue/";
 
     useEffect( () => {
       const fetchAuth = async () => {
@@ -33,17 +36,13 @@ export default function MyIssues() {
                 const issueStatus = (getMyIssues.data.issueStatus).split(",");
                 const issueTimeRequirement = (getMyIssues.data.issueTimeRequirement).split(",");
                 const deadlinedate = (getMyIssues.data.deadlinedate).split(",");
-                const assignval = (getMyIssues.data.assignval).split(",");
-                const teamusername = (getMyIssues.data.teamusername).split(",");
                 const username = (getMyIssues.data.username).split(",");
-                const lastupdated = (getMyIssues.data.lastupdated).split(",");
                 const lastupdated_date = (getMyIssues.data.lastupdated_date).split(",");
                 var count = 0;
                 for (var issueID in issueid) {
                     const arr = [issueid[count], isFound[count], issueName[count], issueSummary[count],
                         issuePriority[count], issueStatus[count], issueTimeRequirement[count],
-                        deadlinedate[count], assignval[count], teamusername[count],
-                        username[count], lastupdated[count], lastupdated_date[count]];
+                        deadlinedate[count], username[count], lastupdated_date[count]];
                     if (issueStatus[count] == "WIP") {
                       setWIPIssues(WIPIssues => [...WIPIssues, arr]);
                     } else if (issueStatus[count] == "Blocked") {
@@ -74,72 +73,80 @@ export default function MyIssues() {
             <div style={{position: "sticky", top: 0, zIndex: 100}}>
               <Mynav params={{username: userid}} />
             </div>
+            <h4 style={{padding: "2em"}}>My Issues - these include all personal issues and those created by you for other teams.</h4>
+            <Button style={{padding: "1em", margin: "1em"}} href="/create-myissue" variant='contained'>Create Issue</Button>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", padding: "1em"}}>
-                <h4>My Issues - these include all personal issues and those created by you for other teams.</h4>
-                <Grid item={true} xs={12}>
+                <Grid item={true} xs={12} sm={6} md={4} lg={3}>
                     <h3>Backlog</h3>
                     {BacklogIssues.map((issue, _key) => {
                         return (
                             <>
-                                <Grid item={true} key={_key} xs={6} sm={6} md={4} lg={3} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
+                                <Grid item={true} key={_key} xs={12} sm={12} md={12} lg={12} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
                                     <Card variant="outlined" style={{padding: "1em"}}>
                                         <h3 style={{color: "black", padding: "1em"}}>{issue[2]}</h3>
+                                        <Link href={basic_issue_url + issue[0]}>
+                                          <Button style={{margin: "1em"}} variant='contained'>View Issue</Button>
+                                        </Link>
                                     </Card>
                                 </Grid>
                             </>
                         )
                     })}
               </Grid>
-              <Grid item={true} xs={12}>
+              <Grid item={true} xs={12} sm={6} md={4} lg={3}>
                     <h3>WIP</h3>
                     {WIPIssues.map((issue, _key) => {
                         return (
                             <>
-                                <Grid item={true} key={_key} xs={6} sm={6} md={4} lg={3} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
+                                <Grid item={true} key={_key} xs={12} sm={12} md={12} lg={12} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
                                     <Card variant="outlined" style={{padding: "1em"}}>
                                         <h3 style={{color: "black", padding: "1em"}}>{issue[2]}</h3>
+                                        <Link href={basic_issue_url + issue[0]}>View Issue</Link>
                                     </Card>
                                 </Grid>
                             </>
                         )
                     })}
               </Grid>
-              <Grid item={true} xs={12}>
+              <Grid item={true} xs={12} sm={6} md={4} lg={3}>
                     <h3>Blocked</h3>
                     {BlockedIssues.map((issue, _key) => {
                         return (
                             <>
-                                <Grid item={true} key={_key} xs={6} sm={6} md={4} lg={3} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
+                                <Grid item={true} key={_key} xs={12} sm={12} md={12} lg={12} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
                                     <Card variant="outlined" style={{padding: "1em"}}>
                                         <h3 style={{color: "black", padding: "1em"}}>{issue[2]}</h3>
+                                        <Link href={basic_issue_url + issue[0]}>View Issue</Link>
                                     </Card>
                                 </Grid>
                             </>
                         )
                     })}
               </Grid>
-              <Grid item={true} xs={12}>
+              <Grid item={true} xs={12} sm={6} md={4} lg={3}>
                     <h3>Closed</h3>
                     {ClosedIssues.map((issue, _key) => {
                         return (
                             <>
-                                <Grid item={true} key={_key} xs={6} sm={6} md={4} lg={3} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
+                                <Grid item={true} key={_key} xs={12} sm={12} md={12} lg={12} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
                                     <Card variant="outlined" style={{padding: "1em"}}>
                                         <h3 style={{color: "black", padding: "1em"}}>{issue[2]}</h3>
+                                        <Link href={basic_issue_url + issue[0]}>View Issue</Link>
                                     </Card>
                                 </Grid>
                             </>
                         )
                     })}
               </Grid>
-              <Grid item={true} xs={12}>
+              <Grid item={true} xs={12} sm={6} md={4} lg={3}>
                     <h3>Complete</h3>
                     {CompleteIssues.map((issue, _key) => {
                         return (
                             <>
-                                <Grid item={true} key={_key} xs={6} sm={6} md={4} lg={3} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
+                                <Grid item={true} key={_key} xs={12} sm={12} md={12} lg={12} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
                                     <Card variant="outlined" style={{padding: "1em"}}>
                                         <h3 style={{color: "black", padding: "1em"}}>{issue[2]}</h3>
+                                        <Link href={basic_issue_url + issue[0]}>View Issue</Link>
                                     </Card>
                                 </Grid>
                             </>

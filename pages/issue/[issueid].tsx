@@ -50,13 +50,14 @@ export default function Ticket() {
             // check team users
             const getUserTeams = await axios.get('/api/user/GetUserInfo?userid=' + userid);
             var userteams = getUserTeams.data.teams;
-            userteams = userteams.toString().split();
+            userteams = userteams.toString().split(",");
             var doesmatch = false;
             for (var team in userteams) {
               if (team == getIssue.data.teamusername) {
                 doesmatch = true;
               }
             }
+            console.log(userteams, doesmatch);
             if (doesmatch == true) {
               setcanView(true);
             } else {
@@ -64,6 +65,7 @@ export default function Ticket() {
             }
           } else {
             // individual issue - check if auth user is same as issue created user.
+            console.log(getIssue.data.username, userid);
             if (getIssue.data.username != userid) {
               setcanView(false);
             } else {
