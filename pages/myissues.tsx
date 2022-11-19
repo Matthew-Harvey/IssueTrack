@@ -162,7 +162,7 @@ export default function MyIssues() {
         <>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
               <Grid item={true} xs={12}>
-                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
                   <p>You are not authorised to view this issue or it does not exist.</p>
                 </Box>
               </Grid>

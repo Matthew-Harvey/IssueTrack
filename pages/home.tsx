@@ -36,6 +36,7 @@ export default function home() {
     const [isAuth, setAuth] = useState(null);
     const [userid, setUsername] = useState("");
     const [userTeams, setUserTeams] = useState(Array());
+    const [userTeamsNames, setUserTeamNames] = useState(Array());
     const [userStatus, setStatus] = useState("");
     const [createdUser, setCreatedUser] = useState("");
 
@@ -49,10 +50,13 @@ export default function home() {
                 if (getAuth.data.isAuth == true) {
                     setAuth(getAuth.data.isAuth);
                     setUsername(getAuth.data.name);
-                    const getUserTeams = await axios.get('/api/user/GetUserInfo?userid=' + userid);
+                    const getUserTeams = await axios.get('/api/user/GetUserInfo', {params: {userid: userid}});
                     var userteams = getUserTeams.data.teams;
                     userteams = userteams.toString().split(",");
                     setUserTeams(userteams);
+                    var userteamnames = getUserTeams.data.teams_name;
+                    userteamnames = userteamnames.toString().split(",");
+                    setUserTeamNames(userteamnames);
                     setCreatedUser(getUserTeams.data.created);
                     setStatus(getUserTeams.data.status);
                 } else {
@@ -106,7 +110,7 @@ export default function home() {
                                             <>
                                                 <Grid item={true} key={_key} xs={6} sm={6} md={4} lg={3} style={{padding: "1em", justifyContent: "center", textAlign: "center"}}>
                                                     <Card variant="outlined" style={{background: getgradient, padding: "1em"}}>
-                                                            <h3 style={{color: "white", padding: "1em"}}>{team}</h3>
+                                                            <h3 style={{color: "white", padding: "1em"}}>{userTeamsNames[_key]}</h3>
                                                             <Link href={teamurl}>
                                                                 <Button style={{margin: "1em"}} variant='contained'>View Team</Button>
                                                             </Link>
@@ -168,7 +172,7 @@ export default function home() {
             <>
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
                     <Grid item={true} xs={12}>
-                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
                             <p>YOU ARE NOT LOGGED IN.</p>
                             <Button><Link href='/'>Login/Register</Link></Button>
                         </Box>

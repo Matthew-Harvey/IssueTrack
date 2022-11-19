@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/_app.js", "pages/signIn.ts", "pages/comps/LineChart.jsx"  ],
+, "pages/_app.ts", "pages/signIn.ts", "pages/comps/LineChart.jsx", "pages/index.js"  ],
   "exclude": [
     "node_modules"
   ]

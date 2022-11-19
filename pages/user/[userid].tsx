@@ -75,7 +75,7 @@ export default function UserProfile() {
       }
     }
     const fetchData = async () => {
-      const response = await axios.get('/api/user/GetUserInfo?userid=' + userid);
+      const response = await axios.get('/api/user/GetUserInfo', {params: {userid: userid}});
       setFound(response.data.isFound);
       setEmail(response.data.email);
       setStatus(response.data.status);

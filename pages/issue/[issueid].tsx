@@ -8,12 +8,11 @@ import Footer from "../comps/Footer";
 
 export default function Ticket() {
     const router = useRouter();
-    const { issueid } = router.query;
 
-    const [isAuth, setAuth] = useState(null);
+    const { issueid } = router.query;
     const [userid, setUserId] = useState("");
-    const [canView, setcanView] = useState(null);
     const [IssueObj, setIssueObj] = useState(Object());
+    const [viewable, setViewable] = useState({auth: null, permview: null})
 
     useEffect( () => {
       if(!issueid) {
@@ -25,15 +24,16 @@ export default function Ticket() {
             var username_cookie = strsplit[0];
             var id_cookiestrsplit = strsplit[1];
             const getAuth = await axios.get("/api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
+            const getIssue = await axios.get("/api/issue/GetIssueInfo", {params: {issueID: issueid}});
+            const getUserTeams = await axios.get('/api/user/GetUserInfo', {params: {userid: userid}});
             if (getAuth.data.isAuth == true) {
-                const getIssue = await axios.get("/api/issue/GetIssueInfo", {params: {issueID: issueid}});
-                setAuth(getAuth.data.isAuth);
+                console.log(getIssue.data);
                 setUserId(username_cookie);
                 if (getIssue.data.isFound == false) {
-                  setcanView(false);
+                  setViewable({ auth: true, permview: false});
                 } else {
                   if (getIssue.data.teamusername != "") {
-                    const getUserTeams = await axios.get('/api/user/GetUserInfo?userid=' + userid);
+                    console.log(getUserTeams.data);
                     // check team users
                     var userteams = getUserTeams.data.teams;
                     userteams = userteams.toString().split(",");
@@ -44,31 +44,41 @@ export default function Ticket() {
                       }
                     }
                     if (doesmatch == true) {
-                      setcanView(true);
+                      console.log("user team matches issue team");
+                      console.log(userteams, getIssue.data.teamusername);
+                      setViewable({ auth: true, permview: true});
                     } else {
-                      setcanView(false);
+                      console.log("user team dont match issue team");
+                      console.log(userteams, getIssue.data.teamusername);
+                      setViewable({ auth: true, permview: false});
                     }
                   } else {
                     // individual issue - check if auth user is same as issue created user.
                     if (getIssue.data.username == userid) {
-                      setcanView(true);
+                      console.log("username matches issue");
+                      console.log(getIssue.data.username, userid);
+                      setViewable({ auth: true, permview: true});
                     } else {
-                      setcanView(false);
+                      console.log("username doesnt match issue");
+                      console.log(getIssue.data.username, userid);
+                      setViewable({ auth: true, permview: false});
                     }
                   }
                   setIssueObj(getIssue.data);
                 }
             } else {
-              setAuth(getAuth.data.isAuth);
+              setViewable({ auth: false, permview: null});
           }
         } else {
-          setAuth(false);
+          setViewable({ auth: false, permview: null});
         }
       }
       fetchAuth();
-    }, [isAuth, issueid]);
+    }, [issueid, userid]);
+
+    console.log(viewable);
   
-    if (isAuth == true && canView == true) {
+    if (viewable.auth == true && viewable.permview == true) {
       return (
         <>
             <div style={{position: "sticky", top: 0, zIndex: 100}}>
@@ -92,16 +102,32 @@ export default function Ticket() {
             <Footer params={{username: userid}} />
         </>
       )
-    } else if (isAuth == false || canView == false) {
+    } else if (viewable.permview == false) {
       return (
         <>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
               <Grid item={true} xs={12}>
-                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
                   <p>You are not authorised to view this issue or it does not exist.</p>
                 </Box>
               </Grid>
             </Grid>
+        </>
+      )
+    } else if (viewable.auth == true && viewable.permview == false) {
+      return (
+        <>
+            <div style={{position: "sticky", top: 0, zIndex: 100}}>
+              <Mynav params={{username: userid}} />
+            </div>
+            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
+              <Grid item={true} xs={12}>
+                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
+                  <p>You are not authorised to view this issue or it does not exist.</p>
+                </Box>
+              </Grid>
+            </Grid>
+            <Footer params={{username: userid}} />
         </>
       )
     } else {

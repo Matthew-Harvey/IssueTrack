@@ -18,9 +18,9 @@ export default async function CreateTeam(req: NextApiRequest, res: NextApiRespon
     snapshot.forEach(docSnap => {
         var userdata = docSnap.data();
         if (userdata.teams == "") {
-          updateDoc(doc(firestore, "users", docSnap.id), {teams: userdata.teams + teamid});
+          updateDoc(doc(firestore, "users", docSnap.id), {teams: userdata.teams + teamid, teams_name: userdata.teams_name + teamname});
         } else {
-          updateDoc(doc(firestore, "users", docSnap.id), {teams: userdata.teams + "," + teamid});
+          updateDoc(doc(firestore, "users", docSnap.id), {teams: userdata.teams + "," + teamid, teams_name: userdata.teams_name + "," + teamname});
         }
     });
   }

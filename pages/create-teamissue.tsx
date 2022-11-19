@@ -14,12 +14,7 @@ export default function CreateTeamIssue() {
 
     const router = useRouter();
     const teamid = router.query.teamid;
-    try {
-        var teamidstring = teamid.toString();
-    } catch(e) {
-        var teamidstring = "";
-    }
-
+    
     useEffect( () => {
         const fetchAuth = async () => {
             if (getCookie('login_info') != undefined) {
@@ -80,11 +75,6 @@ export default function CreateTeamIssue() {
         setDeadline(value);
     };
     
-    const [teamusername, setTeamUsername] = useState("");
-    const teamusernameChange = (value) => {
-        setTeamUsername(value);
-    };
-
     const [CheckTeamIDIsLoading, setCheckTeamIDLoading] = useState(false);
     const [CheckTeamIDIsUnique, setTeamIDIsUnique] = useState("");
     const CreateIssue = async function () {
@@ -92,10 +82,10 @@ export default function CreateTeamIssue() {
         setTeamIDIsUnique("null");
         const response = await axios.get('/api/team/CheckTeamID', {
             params: {
-                teamid: teamusername,
+                teamid: teamid,
             }
         })
-        console.log(teamusername, response.data.isFound)
+        console.log(teamid, response.data.isFound)
         if (response.data.isFound == true) {
             await axios.get('/api/issue/CreateTeamIssue', {
                 params: {
@@ -106,7 +96,7 @@ export default function CreateTeamIssue() {
                     issueStatus: issueStatus,
                     issueTimeRequirement: issueTimeRequirement,
                     deadlinedate: deadlinedate,
-                    teamusername: teamusername,
+                    teamusername: teamid,
                     createdby: username,
                 }
             });
@@ -124,7 +114,7 @@ export default function CreateTeamIssue() {
                     <Mynav params={{username: username}}/>
                 </div>
                 <Box m="auto" display="flex" alignItems="center" justifyContent="center" style={{paddingTop: "2em"}}>
-                    <h2>Create a new issue</h2>
+                    <h2>Create a new issue for a team</h2>
                 </Box>
                 <Grid container spacing={0} style={{padding: "2em"}}>
                     <Grid item={true} xs={12} sm={12} md={12} lg={12}>
@@ -181,9 +171,6 @@ export default function CreateTeamIssue() {
                     <Grid item={true} xs={12} sm={12} md={12} lg={12}>
                         <TextField style={{padding: "1em"}} variant="standard" fullWidth label="Summary" placeholder="Issue Summary" multiline rows={4} value={issueSummary} onChange={(e) => issueSummaryChange(e.target.value)}/>
                     </Grid>
-                    <Grid item={true} xs={12} sm={7} md={7} lg={7}>
-                        <TextField style={{padding: "1em"}} fullWidth id="issueAssignTeam" label="Team Username" placeholder={teamidstring} variant="standard" value={teamusername} onChange={(e) => teamusernameChange(e.target.value)} />
-                    </Grid>
                     {CheckTeamIDIsUnique == "true" && (
                         <>
                             <Grid item={true} xs={12} sm={5} md={5} lg={5}>
@@ -210,10 +197,8 @@ export default function CreateTeamIssue() {
             <>
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
                     <Grid item={true} xs={12}>
-                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
                             <p>You must login in order to create an issue.</p>
-                        </Box>
-                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
                             <Button><Link href='/'>Login/Register</Link></Button>
                         </Box>
                     </Grid>

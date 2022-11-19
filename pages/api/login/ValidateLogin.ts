@@ -7,7 +7,6 @@ export default async function ValidateLogin(req: NextApiRequest, res: NextApiRes
     const user_collection = collection(firestore, "users");
     var username = req.query.username;
     const password = req.query.password;
-    var doesmatch = false;
     var idmatch = null;
     var pass = null;
     const q = query(user_collection, where("name", "==", username));

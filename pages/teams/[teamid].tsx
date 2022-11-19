@@ -21,6 +21,7 @@ export default function TeamIssues() {
     const [CompleteIssues, setCompleteIssues] = useState(Array());
 
     const basic_issue_url = "/issue/";
+    const basic_create_team_issue_url = "/create-teamissue?teamid=" + teamid;
 
     useEffect( () => {
       const fetchAuth = async () => {
@@ -78,7 +79,7 @@ export default function TeamIssues() {
               <Mynav params={{username: userid}} />
             </div>
             <h4 style={{padding: "2em"}}>Team Issues.</h4>
-            <Button style={{padding: "1em", margin: "1em"}} href="/create-teamissue" variant='contained'>Create Issue</Button>
+            <Button style={{padding: "1em", margin: "1em"}} href={basic_create_team_issue_url} variant='contained'>Create Issue</Button>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", padding: "1em"}}>
                 <Grid item={true} xs={12} sm={6} md={4} lg={3}>
                     <h3>Backlog</h3>
@@ -166,8 +167,8 @@ export default function TeamIssues() {
         <>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
               <Grid item={true} xs={12}>
-                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-                  <p>You are not authorised to view this issue or it does not exist.</p>
+                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
+                  <p>You are not authorised to view this team or it does not exist.</p>
                 </Box>
               </Grid>
             </Grid>

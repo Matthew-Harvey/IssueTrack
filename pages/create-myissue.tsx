@@ -165,10 +165,8 @@ export default function IssueCreate() {
             <>
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
                     <Grid item={true} xs={12}>
-                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
                             <p>You must login in order to create an issue.</p>
-                        </Box>
-                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
                             <Button><Link href='/'>Login/Register</Link></Button>
                         </Box>
                     </Grid>
