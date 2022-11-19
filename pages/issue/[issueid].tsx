@@ -26,15 +26,15 @@ export default function Ticket() {
             var id_cookiestrsplit = strsplit[1];
             const getAuth = await axios.get("/api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
             if (getAuth.data.isAuth == true) {
+                const getIssue = await axios.get("/api/issue/GetIssueInfo", {params: {issueID: issueid}});
                 setAuth(getAuth.data.isAuth);
                 setUserId(username_cookie);
-                const getIssue = await axios.get("/api/issue/GetIssueInfo", {params: {issueID: issueid}});
                 if (getIssue.data.isFound == false) {
                   setcanView(false);
                 } else {
                   if (getIssue.data.teamusername != "") {
-                    // check team users
                     const getUserTeams = await axios.get('/api/user/GetUserInfo?userid=' + userid);
+                    // check team users
                     var userteams = getUserTeams.data.teams;
                     userteams = userteams.toString().split(",");
                     var doesmatch = false;
