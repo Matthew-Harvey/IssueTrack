@@ -14,11 +14,11 @@ export default function TeamIssues() {
 
     const [isAuth, setAuth] = useState(null);
     const [userid, setUserId] = useState("");
-    const [BacklogIssues, setBacklogIssues] = useState(Array());
-    const [WIPIssues, setWIPIssues] = useState(Array());
-    const [BlockedIssues, setBlockedIssues] = useState(Array());
-    const [ClosedIssues, setClosedIssues] = useState(Array());
-    const [CompleteIssues, setCompleteIssues] = useState(Array());
+    const [BacklogIssues, setBacklogIssues] = useState(new Array());
+    const [WIPIssues, setWIPIssues] = useState(new Array());
+    const [BlockedIssues, setBlockedIssues] = useState(new Array());
+    const [ClosedIssues, setClosedIssues] = useState(new Array());
+    const [CompleteIssues, setCompleteIssues] = useState(new Array());
 
     const basic_issue_url = "/issue/";
     const basic_create_team_issue_url = "/create-teamissue?teamid=" + teamid;

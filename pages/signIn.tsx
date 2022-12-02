@@ -1,12 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {Button, Container, TextField, Card} from '@mui/material/';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Grid from '@mui/material/Grid';
 import BugReportOutlinedIcon from '@mui/icons-material/BugReportOutlined';
-import React from "react";
 import { useRouter } from 'next/router';
-import Cookies from 'js-cookie';
 import axios from 'axios';
 import Lottie from "lottie-react";
 import RegisterAnimation from "../public/Register.json";
@@ -56,7 +55,11 @@ export default function signIn() {
       }
     })
     if (getValid.data.isFound == true) {
-      Cookies.set('login_info', loginUsername.toLowerCase() + "," + getValid.data.id, { secure: true })
+      await axios.get('/api/set-cookie', {
+        params: {
+          value: loginUsername.toLowerCase() + "," + getValid.data.id,
+        }
+      })
       router.push({pathname: '/home', query: { username: loginUsername.toLowerCase(), pass: loginPassword}}, '/home', { shallow: true });
     } else {
       document.getElementById("err").innerText = "User not found.";
@@ -75,7 +78,11 @@ export default function signIn() {
       }
     })
     if (getValid.data.isAdded == true) {
-      Cookies.set('login_info', registerUsername.toLowerCase() + "," + getValid.data.id, { secure: true })
+      await axios.get('/api/set-cookie', {
+        params: {
+          value: registerUsername.toLowerCase() + "," + getValid.data.id,
+        }
+      })
       router.push({pathname: '/home', query: { username: registerUsername.toLowerCase(), pass: registerPassword}});
     } else {
       document.getElementById("err").innerText = getValid.data.error;

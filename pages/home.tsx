@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import Mynav from './comps/Mynav';
 import { getCookie } from 'cookies-next';
 import axios from 'axios';

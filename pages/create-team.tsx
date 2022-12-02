@@ -7,33 +7,17 @@ import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
 import Footer from './comps/Footer';
 
-export default function TeamCreate() {
-    const [isAuth, setAuth] = useState(null);
-    const [username, setUsername] = useState("");
-    const router = useRouter();
+export const getServerSideProps = async (ctx) => {
+    const cookie = getCookie('login_info', ctx);
+    var strsplit = cookie.toString().split(",");
+    var username_cookie = strsplit[0];
+    var id_cookiestrsplit = strsplit[1];
+    const getAuth = await axios.get(process.env.BASEURL + "api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
+    return { props: {auth: getAuth.data.isAuth, userid: username_cookie}};
+}
 
-    useEffect( () => {
-        const fetchAuth = async () => {
-            if (getCookie('login_info') != undefined) {
-                var strsplit = getCookie('login_info').toString().split(",");
-                var username_cookie = strsplit[0];
-                var id_cookiestrsplit = strsplit[1];
-                const getAuth = await axios.get("/api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
-                if (getAuth.data.isAuth == true) {
-                    setAuth(getAuth.data.isAuth);
-                    setUsername(getAuth.data.name);
-                } else {
-                    setAuth(getAuth.data.isAuth);
-                }
-            } else {
-                setAuth(false);
-            }
-        }
-        if (addedmembers == "") {
-            setAddMember(username);
-        }
-        fetchAuth();
-    }, [isAuth]);
+export default function TeamCreate({auth, userid}) {
+    const router = useRouter();
 
     function makeid(length) {
         var result = '';
@@ -112,27 +96,27 @@ export default function TeamCreate() {
             params: {
                 teamid: teamid,
                 teamname: team_name,
-                userid: username,
+                userid: userid,
                 members: addedmembers,
                 overview: team_overview,
             }
         })
-        router.push({pathname: '/home', query: { username: username }});
+        router.push({pathname: '/home', query: { username: userid }});
         setCreateTeamLoading(false);
     }
 
     const [ResetMemberLoading, setResetMemberLoading] = useState(false);
     const resetmember = async function (e) {
         setResetMemberLoading(true);
-        setAddMember(username);
+        setAddMember(userid);
         setResetMemberLoading(false);
     }
 
-    if (isAuth == true) {
+    if (auth == true) {
         return (
             <>
                 <div style={{position: "sticky", top: 0, zIndex: 100}}>
-                    <Mynav params={{username: username}}/>
+                    <Mynav params={{username: userid}}/>
                 </div>
                 <Box m="auto" display="flex" alignItems="center" justifyContent="center" style={{paddingTop: "2em"}}>
                     <h2>Create a new team</h2>
@@ -181,20 +165,7 @@ export default function TeamCreate() {
                     )}
                     </Grid>
                 </Grid>
-                <Footer params={{username: username}}/>
-            </>
-        )
-    } else if (isAuth == false){
-        return (
-            <>
-                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
-                    <Grid item={true} xs={12}>
-                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
-                            <p>You must login in order to create a new team.</p>
-                            <Button><Link href='/'>Login/Register</Link></Button>
-                        </Box>
-                    </Grid>
-                </Grid>
+                <Footer params={{username: userid}}/>
             </>
         )
     } else {
@@ -202,8 +173,9 @@ export default function TeamCreate() {
             <>
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
                     <Grid item={true} xs={12}>
-                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-                            <CircularProgress />
+                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
+                            <p>You must login in order to create a new team.</p>
+                            <Button><Link href='/'>Login/Register</Link></Button>
                         </Box>
                     </Grid>
                 </Grid>

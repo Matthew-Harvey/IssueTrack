@@ -8,30 +8,17 @@ import { LoadingButton } from '@mui/lab';
 import Footer from './comps/Footer';
 
 
-export default function IssueCreate() {
-    const [isAuth, setAuth] = useState(null);
-    const [username, setUsername] = useState("");
-    const router = useRouter();
+export const getServerSideProps = async (ctx) => {
+    const cookie = getCookie('login_info', ctx);
+    var strsplit = cookie.toString().split(",");
+    var username_cookie = strsplit[0];
+    var id_cookiestrsplit = strsplit[1];
+    const getAuth = await axios.get(process.env.BASEURL + "api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
+    return { props: {auth: getAuth.data.isAuth, userid: username_cookie}};
+}
 
-    useEffect( () => {
-        const fetchAuth = async () => {
-            if (getCookie('login_info') != undefined) {
-                var strsplit = getCookie('login_info').toString().split(",");
-                var username_cookie = strsplit[0];
-                var id_cookiestrsplit = strsplit[1];
-                const getAuth = await axios.get("/api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
-                if (getAuth.data.isAuth == true) {
-                    setAuth(getAuth.data.isAuth);
-                    setUsername(getAuth.data.name);
-                } else {
-                    setAuth(getAuth.data.isAuth);
-                }
-            } else {
-                setAuth(false);
-            }
-        }
-        fetchAuth();
-    }, [isAuth]);
+export default function IssueCreate( { auth, userid} ) {
+    const router = useRouter();
 
     function makeid(length) {
         var result = '';
@@ -83,17 +70,17 @@ export default function IssueCreate() {
                 issueStatus: issueStatus,
                 issueTimeRequirement: issueTimeRequirement,
                 deadlinedate: deadlinedate,
-                username: username,
+                username: userid,
             }
         });
-        router.push({pathname: '/home'});
+        router.push({pathname: '/myissues'});
     }
 
-    if (isAuth == true) {
+    if (auth == true) {
         return (
             <>
                 <div style={{position: "sticky", top: 0, zIndex: 100}}>
-                    <Mynav params={{username: username}}/>
+                    <Mynav params={{username: userid}}/>
                 </div>
                 <Box m="auto" display="flex" alignItems="center" justifyContent="center" style={{paddingTop: "2em"}}>
                     <h2>Create a new issue</h2>
@@ -157,10 +144,10 @@ export default function IssueCreate() {
                         <LoadingButton variant="contained" onClick={CreateIssue} style={{margin: "1em", padding: "1em"}}>Create Issue</LoadingButton>
                     </Grid>
                 </Grid>
-                <Footer params={{username: username}} />
+                <Footer params={{username: userid}} />
             </>
         )
-    } else if (isAuth == false){
+    } else {
         return (
             <>
                 <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
@@ -168,18 +155,6 @@ export default function IssueCreate() {
                         <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
                             <p>You must login in order to create an issue.</p>
                             <Button><Link href='/'>Login/Register</Link></Button>
-                        </Box>
-                    </Grid>
-                </Grid>
-            </>
-        )
-    } else {
-        return (
-            <>
-                <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
-                    <Grid item={true} xs={12}>
-                        <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-                            <CircularProgress />
                         </Box>
                     </Grid>
                 </Grid>
