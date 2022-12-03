@@ -2,7 +2,6 @@
 import { Box, Button, Card, CircularProgress, Grid } from "@mui/material";
 import axios from "axios";
 import { getCookie } from "cookies-next";
-import { useEffect, useState } from "react";
 import Mynav from "./comps/Mynav";
 import Footer from "./comps/Footer";
 import Link from "next/link";
@@ -66,7 +65,7 @@ export default function MyIssues({ auth, userid, issues}) {
             <h4 style={{padding: "2em"}}>My Issues.</h4>
             <Button style={{padding: "1em", margin: "1em"}} href="/create-myissue" variant='contained'>Create Issue</Button>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", padding: "1em"}}>
-                <Grid item={true} xs={12} sm={6} md={4} lg={3}>
+              <Grid item={true} xs={12} sm={6} md={4} lg={3}>
                     <h3>Backlog</h3>
                     {BacklogIssues.map((issue, _key) => {
                         return (

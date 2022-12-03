@@ -1,84 +1,39 @@
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import axios from "axios";
 import { getCookie } from "cookies-next";
-import { useEffect, useState } from "react";
 import Mynav from "../comps/Mynav";
-import { useRouter } from "next/router";
 import Footer from "../comps/Footer";
 
-export default function Ticket() {
-    const router = useRouter();
-
-    const { issueid } = router.query;
-    const [userid, setUserId] = useState("");
-    const [IssueObj, setIssueObj] = useState(Object());
-    const [viewable, setViewable] = useState({auth: null, permview: null})
-
-    useEffect( () => {
-      if(!issueid) {
-        return;
+export const getServerSideProps = async (ctx) => {
+  const issueid = ctx.params.issueid;
+  const cookie = getCookie('login_info', ctx);
+  var strsplit = cookie.toString().split(",");
+  var username_cookie = strsplit[0];
+  var id_cookiestrsplit = strsplit[1];
+  const getAuth = await axios.get(process.env.BASEURL.toString() + "api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
+  const getIssue = await axios.get(process.env.BASEURL.toString() + "api/issue/GetIssueInfo", {params: {issueID: issueid}});
+  const getUserTeams = await axios.get(process.env.BASEURL.toString() + 'api/user/GetUserInfo', {params: {userid: username_cookie}});
+  var canview = false;
+  if (getAuth.data.isAuth == true && getIssue.data.isFound == true){
+    var userteams = getUserTeams.data.teams.toString().split(",");
+    var foundteam = false;
+    if (userteams == getIssue.data.teamusername) {
+      foundteam = true;
+    }
+    for (var team in userteams){
+      if (getIssue.data.teamusername == team) {
+        foundteam = true;
       }
-      const fetchAuth = async () => {
-        if (getCookie('login_info') != undefined) {
-            var strsplit = getCookie('login_info').toString().split(",");
-            var username_cookie = strsplit[0];
-            var id_cookiestrsplit = strsplit[1];
-            const getAuth = await axios.get("/api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
-            const getIssue = await axios.get("/api/issue/GetIssueInfo", {params: {issueID: issueid}});
-            const getUserTeams = await axios.get('/api/user/GetUserInfo', {params: {userid: userid}});
-            if (getAuth.data.isAuth == true) {
-                console.log(getIssue.data);
-                setUserId(username_cookie);
-                if (getIssue.data.isFound == false) {
-                  setViewable({ auth: true, permview: false});
-                } else {
-                  if (getIssue.data.teamusername != "") {
-                    console.log(getUserTeams.data);
-                    // check team users
-                    var userteams = getUserTeams.data.teams;
-                    userteams = userteams.toString().split(",");
-                    var doesmatch = false;
-                    for (var count in userteams) {
-                      if (userteams[count] == getIssue.data.teamusername) {
-                        doesmatch = true;
-                      }
-                    }
-                    if (doesmatch == true) {
-                      console.log("user team matches issue team");
-                      console.log(userteams, getIssue.data.teamusername);
-                      setViewable({ auth: true, permview: true});
-                    } else {
-                      console.log("user team dont match issue team");
-                      console.log(userteams, getIssue.data.teamusername);
-                      setViewable({ auth: true, permview: false});
-                    }
-                  } else {
-                    // individual issue - check if auth user is same as issue created user.
-                    if (getIssue.data.username == userid) {
-                      console.log("username matches issue");
-                      console.log(getIssue.data.username, userid);
-                      setViewable({ auth: true, permview: true});
-                    } else {
-                      console.log("username doesnt match issue");
-                      console.log(getIssue.data.username, userid);
-                      setViewable({ auth: true, permview: false});
-                    }
-                  }
-                  setIssueObj(getIssue.data);
-                }
-            } else {
-              setViewable({ auth: false, permview: null});
-          }
-        } else {
-          setViewable({ auth: false, permview: null});
-        }
-      }
-      fetchAuth();
-    }, [issueid, userid]);
+    }
+    if (foundteam == true){
+      canview = true;
+    }
+  }
+  return { props: {canview: canview, issue: getIssue.data, userid: username_cookie}};
+}
 
-    console.log(viewable);
-  
-    if (viewable.auth == true && viewable.permview == true) {
+export default function Ticket({canview, issue, userid}) {
+    if (canview == true) {
       return (
         <>
             <div style={{position: "sticky", top: 0, zIndex: 100}}>
@@ -86,45 +41,17 @@ export default function Ticket() {
             </div>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", padding: "1em"}}>
               <Grid item={true} xs={12}>
-                <h2>{IssueObj.issueName}</h2>
-                <p>Created by {IssueObj.lastupdated} at {IssueObj.lastupdated_date}</p>
-                <h4>Summary: {IssueObj.issueSummary}</h4>
-                <p>Priority: {IssueObj.issuePriority}</p>
-                <p>Status: {IssueObj.issueStatus}</p>
-                <p>Estimated Time: {IssueObj.issueTimeRequirement}</p>
-                <p>Deadline: {IssueObj.deadlinedate}</p>
+                <h2>{issue.issueName}</h2>
+                <p>Created by {issue.lastupdated} at {issue.lastupdated_date}</p>
+                <h4>Summary: {issue.issueSummary}</h4>
+                <p>Priority: {issue.issuePriority}</p>
+                <p>Status: {issue.issueStatus}</p>
+                <p>Estimated Time: {issue.issueTimeRequirement}</p>
+                <p>Deadline: {issue.deadlinedate}</p>
               </Grid>
               <br />
               <Grid item={true} xs={12}>
                 <h3>History</h3>
-              </Grid>
-            </Grid>
-            <Footer params={{username: userid}} />
-        </>
-      )
-    } else if (viewable.permview == false) {
-      return (
-        <>
-            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
-              <Grid item={true} xs={12}>
-                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
-                  <p>You are not authorised to view this issue or it does not exist.</p>
-                </Box>
-              </Grid>
-            </Grid>
-        </>
-      )
-    } else if (viewable.auth == true && viewable.permview == false) {
-      return (
-        <>
-            <div style={{position: "sticky", top: 0, zIndex: 100}}>
-              <Mynav params={{username: userid}} />
-            </div>
-            <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
-              <Grid item={true} xs={12}>
-                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
-                  <p>You are not authorised to view this issue or it does not exist.</p>
-                </Box>
               </Grid>
             </Grid>
             <Footer params={{username: userid}} />
@@ -135,11 +62,11 @@ export default function Ticket() {
         <>
             <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
               <Grid item={true} xs={12}>
-                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-                    <CircularProgress />
+                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "90vh"}}>
+                  <p>You are not authorised to view this issue or it does not exist.</p>
                 </Box>
               </Grid>
-          </Grid>
+            </Grid>
         </>
       )
     }
