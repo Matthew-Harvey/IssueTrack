@@ -12,7 +12,7 @@ export const getServerSideProps = async (ctx) => {
     var strsplit = cookie.toString().split(",");
     var username_cookie = strsplit[0];
     var id_cookiestrsplit = strsplit[1];
-    const getAuth = await axios.get(process.env.BASEURL + "api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
+    const getAuth = await axios.get(process.env.BASEURL.toString() + "api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
     return { props: {auth: getAuth.data.isAuth, userid: username_cookie}};
 }
 
