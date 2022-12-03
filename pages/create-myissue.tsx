@@ -1,8 +1,8 @@
 import Mynav from './comps/Mynav';
 import { getCookie } from 'cookies-next';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { Box, Button, CircularProgress, Grid, InputLabel, Link, MenuItem, Select, Stack, TextField } from '@mui/material';
+import { useState } from 'react';
+import { Box, Button, Grid, InputLabel, Link, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
 import Footer from './comps/Footer';

@@ -70,7 +70,7 @@ export default function TeamIssues() {
         }
       }
       fetchAuth();
-    }, [isAuth]);
+    }, [isAuth, teamid]);
 
     if (isAuth == true) {
       return (

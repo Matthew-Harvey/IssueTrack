@@ -19,11 +19,11 @@ export const getServerSideProps = async (ctx) => {
 
 export default function MyIssues({ auth, userid, issues}) {
 
-    const [BacklogIssues, setBacklogIssues] = useState(new Array());
-    const [WIPIssues, setWIPIssues] = useState(new Array());
-    const [BlockedIssues, setBlockedIssues] = useState(new Array());
-    const [ClosedIssues, setClosedIssues] = useState(new Array());
-    const [CompleteIssues, setCompleteIssues] = useState(new Array());
+    const BacklogIssues = new Array();
+    const WIPIssues = new Array();
+    const BlockedIssues = new Array();
+    const ClosedIssues = new Array();
+    const CompleteIssues = new Array();
 
     const basic_issue_url = "/issue/";
     const issueid = (issues.issueID).split(",");
@@ -38,28 +38,24 @@ export default function MyIssues({ auth, userid, issues}) {
     const lastupdated_date = (issues.lastupdated_date).split(",");
     var count = 0;
     
-    useEffect(() => {
-      for (var issueID in issueid) {
-        const arr = [issueid[count], isFound[count], issueName[count], issueSummary[count],
-            issuePriority[count], issueStatus[count], issueTimeRequirement[count],
-            deadlinedate[count], username[count], lastupdated_date[count]];
+    for (var issueID in issueid) {
+      const arr = [issueid[count], isFound[count], issueName[count], issueSummary[count],
+          issuePriority[count], issueStatus[count], issueTimeRequirement[count],
+          deadlinedate[count], username[count], lastupdated_date[count]];
 
-        console.log(arr);
-
-        if (issueStatus[count] == "WIP") {
-          setWIPIssues(WIPIssues => [...WIPIssues, arr]);
-        } else if (issueStatus[count] == "Blocked") {
-          setBlockedIssues(BlockedIssues => [...BlockedIssues, arr]);
-        } else if (issueStatus[count] == "Closed") {
-          setClosedIssues(ClosedIssues => [...ClosedIssues, arr]);
-        } else if (issueStatus[count] == "Complete") {
-          setCompleteIssues(CompleteIssues => [...CompleteIssues, arr]);
-        } else if (issueStatus[count] == "Backlog") {
-          setBacklogIssues(BacklogIssues => [...BacklogIssues, arr]);
-        }
-        count++;
-      };
-    }, [])
+      if (issueStatus[count] == "WIP") {
+        WIPIssues.push(arr);
+      } else if (issueStatus[count] == "Blocked") {
+        BlockedIssues.push(arr);
+      } else if (issueStatus[count] == "Closed") {
+        ClosedIssues.push(arr);
+      } else if (issueStatus[count] == "Complete") {
+        CompleteIssues.push(arr);
+      } else if (issueStatus[count] == "Backlog") {
+        BacklogIssues.push(arr);
+      }
+      count++;
+    };
 
     if (auth == true) {
       return (

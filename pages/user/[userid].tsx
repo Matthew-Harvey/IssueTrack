@@ -1,4 +1,4 @@
-import { Backdrop, Button, Card, CircularProgress, Fade, Modal, Tab, Tabs, TextField, Typography } from '@mui/material';
+import { Backdrop, Button, Fade, Modal, Tab, Tabs, TextField, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -45,44 +45,33 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-export default function UserProfile() {
+export const getServerSideProps = async (ctx) => {
+  const cookie = getCookie('login_info', ctx);
+  var strsplit = cookie.toString().split(",");
+  var username_cookie = strsplit[0];
+  var id_cookiestrsplit = strsplit[1];
+  const getAuth = await axios.get(process.env.BASEURL.toString() + "api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
+  return { props: {auth: getAuth.data.isAuth, autheduser: username_cookie}};
+}
+
+export default function UserProfile( {auth, autheduser} ) {
   const router = useRouter();
   const { userid } = router.query;
-
-  const [isFound, setFound] = useState(null);
-  const [isAuth, setAuth] = useState(null);
   const [userEmail, setEmail] = useState("");
   const [userStatus, setStatus] = useState("");
   const [createdUser, setCreatedUser] = useState("");
 
-  useEffect( () => {
+  useEffect(() => {
     if(!userid) {
       return;
     }
-    const fetchAuth = async () => {
-      if (getCookie('login_info') != undefined) {
-          var strsplit = getCookie('login_info').toString().split(",");
-          var username_cookie = strsplit[0];
-          var id_cookiestrsplit = strsplit[1];
-          const getAuth = await axios.get("/api/Auth", {params: {id: id_cookiestrsplit, user: username_cookie}});
-          if (getAuth.data.isAuth == true) {
-              setAuth(getAuth.data.isAuth);
-          } else {
-            setAuth(getAuth.data.isAuth);
-        }
-      } else {
-        setAuth(false);
-      }
-    }
     const fetchData = async () => {
       const response = await axios.get('/api/user/GetUserInfo', {params: {userid: userid}});
-      setFound(response.data.isFound);
       setEmail(response.data.email);
       setStatus(response.data.status);
       setCreatedUser(response.data.created);
     }
     fetchData();
-    fetchAuth();
   }, [userid]);
 
   const [open, setOpen] = useState(false);
@@ -142,103 +131,58 @@ export default function UserProfile() {
       }
     ]
   };
-
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
   
-  // SOME USER STATS
-
-  // EDIT PROFILE - (CAN BE CHANGED IF OWNER), Description, Status/Last Online Date, Teams - optional to be public
-  // ISSUES CREATED
-  // ISSUES ASSIGNED
-  // ISSUES CLOSED
-  // CURRENT WORK - ONLY IF OWNERS PROFILE (NOT STARTED, WIP, COMPLETED - EACH TEAM + INDIVIDUAL)
-
-  if (isFound == true) {
+  if (auth == true) {
     return (
       <>
           <div style={{position: "sticky", top: 0, zIndex: 100}}>
-            <Mynav params={{username: userid}} />
+            <Mynav params={{username: autheduser}} />
           </div>
           <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center"}}>
             <Grid item={true} xs={12}>
-              {isAuth == true &&
-                <>
-                  <Box sx={{justifyContent: "center", textAlign: "center", padding: "1em"}}>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                      <Tab label="Profile" {...a11yProps(0)} />
-                      <Tab label="Stats" {...a11yProps(1)} />
-                      <Tab label="Activity" {...a11yProps(2)} />
-                    </Tabs>
-                  </Box>
-                  <TabPanel value={value} index={0}>
-                    <Box m="auto" display="flex" alignItems="center" justifyContent="center">
-                      <Avatar src="/vercel.svg" sx={{ width: 200, height: 200 }} style={{alignItems: 'center'}}/>
-                    </Box>
-                    <h1>{userid}</h1>
-                    <h4>Status: {userStatus}</h4>
-                    <h5>Joined: {createdUser}</h5>
+                <Box m="auto" display="flex" alignItems="center" justifyContent="center">
+                  <Avatar src="/vercel.svg" sx={{ width: 200, height: 200 }} style={{alignItems: 'center'}}/>
+                </Box>
+                <h1>{userid}</h1>
+                <h4>Status: {userStatus}</h4>
+                <h5>Joined: {createdUser}</h5>
+                {autheduser == userid &&
+                  <>
                     <Button onClick={handleOpen}>Edit Profile</Button>
                     <Modal aria-labelledby="transition-modal-title" aria-describedby="transition-modal-description" open={open} onClose={handleClose} closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{timeout: 500,}}>
                       <Fade in={open}>
                         <Box sx={style}>
-                          <Typography id="transition-modal-title" variant="h4" component="h4">
-                            Details:
-                          </Typography>
+                          <Typography id="transition-modal-title" variant="h4" component="h4">Details:</Typography>
                           <br />
-                          <TextField style={{margin: "1em", marginLeft: "0em"}} disabled fullWidth id="outlined-multiline-flexible" label="Username" multiline maxRows={4} defaultValue={userid}/>
-                          <TextField style={{margin: "1em", marginLeft: "0em"}} fullWidth id="outlined-multiline-flexible" label="Email" multiline maxRows={4} defaultValue={userEmail} onChange={(e) => EmailChange(e.target.value)}/>
-                          <TextField style={{margin: "1em", marginLeft: "0em"}} fullWidth id="outlined-multiline-flexible" label="Status" multiline maxRows={4} defaultValue={userStatus} onChange={(e) => StatusChange(e.target.value)}/>
+                          <TextField style={{margin: "1em", marginLeft: "0em"}} disabled fullWidth id="outlined-multiline-flexible" label="Username" multiline maxRows={4} defaultValue={userid} />
+                          <TextField style={{margin: "1em", marginLeft: "0em"}} fullWidth id="outlined-multiline-flexible" label="Email" multiline maxRows={4} defaultValue={userEmail} onChange={(e) => EmailChange(e.target.value)} />
+                          <TextField style={{margin: "1em", marginLeft: "0em"}} fullWidth id="outlined-multiline-flexible" label="Status" multiline maxRows={4} defaultValue={userStatus} onChange={(e) => StatusChange(e.target.value)} />
                           <Button onClick={function(){ handleClose(); updateDetails(userid)}}>Submit</Button>
                         </Box>
                       </Fade>
                     </Modal>
-                  </TabPanel>
-                  <TabPanel value={value} index={1}>
-                    <Grid container spacing={1} style={{justifyContent: "center", textAlign: "center", padding: "2em"}}>
-                      <Grid item={true} xs={4}>
-                        <Pie data={piedata} />
-                      </Grid>
-                      <Grid item={true} xs={8}>
-                        <Line data={linedata} />
-                      </Grid>
-                      
-                    </Grid>
-                  </TabPanel>
-                  <TabPanel value={value} index={2}>
-                    Item Three
-                  </TabPanel>
-                </>
-              }
+                  </>
+                }
+            </Grid>
+            <Grid item={true} xs={4}>
+              <Pie data={piedata} />
+            </Grid>
+            <Grid item={true} xs={4}>
+              <Line data={linedata} />
             </Grid>
           </Grid>
-          <Footer params={{username: userid}} />
-      </>
-    )
-  } else if (isFound == false) {
-    return (
-      <>
-          <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
-            <Grid item={true} xs={12}>
-              <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-                <p>USER DOES NOT EXIST</p>
-              </Box>
-            </Grid>
-          </Grid>
+          <Footer params={{username: autheduser}} />
       </>
     )
   } else {
     return (
       <>
           <Grid container spacing={0} style={{justifyContent: "center", textAlign: "center", alignItems: "center"}}>
-              <Grid item={true} xs={12}>
-                <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
-                    <CircularProgress />
-                </Box>
-              </Grid>
+            <Grid item={true} xs={12}>
+              <Box m="auto" style={{display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", minHeight: "100vh"}}>
+                <p>USER DOES NOT EXIST / NOT LOGGED IN </p>
+              </Box>
+            </Grid>
           </Grid>
       </>
     )
